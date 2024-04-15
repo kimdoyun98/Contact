@@ -85,4 +85,8 @@ dependencies {
     //kakao api
     implementation("com.kakao.sdk:v2-user:2.20.1")
 
+    //navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
 }

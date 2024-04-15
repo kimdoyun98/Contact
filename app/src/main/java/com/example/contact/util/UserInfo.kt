@@ -3,7 +3,7 @@ package com.example.contact.util
 import android.util.Log
 import com.kakao.sdk.user.UserApiClient
 
-class UserInfo {
+object UserInfo {
     private var nickname: String? = ""
     private var email: String? = ""
 

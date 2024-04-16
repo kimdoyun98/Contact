@@ -2,47 +2,40 @@ package com.example.contact.ui.sign
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.contact.databinding.ActivityLoginBinding
 import com.example.contact.ui.MainActivity
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class Login : AppCompatActivity() {
+@AndroidEntryPoint
+class Login: AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-
+    private val viewModel: KakaoAuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.kakaoLogin.setOnClickListener {
-            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
-                UserApiClient.instance.loginWithKakaoTalk(this){ token, error ->
-                    if (error != null) {
-                        Log.e("Login", "로그인 실패", error)
+            binding.kakaoLogin.setOnClickListener {
+                viewModel.kakaoLogin(this@Login)
+            }
 
-                        if(error is ClientError && error.reason == ClientErrorCause.Cancelled) return@loginWithKakaoTalk
-                        else UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
-                    }
-                    else if (token != null) {
-                        Log.i("Login", "로그인 성공 ${token.accessToken}")
-                        startActivity(Intent(this, MainActivity::class.java))
+            lifecycleScope.launch {
+                viewModel.logInStatus.collect{
+                    if(it){
+                        val intent = Intent(this@Login, MainActivity::class.java)
+                        startActivity(intent)
                         finish()
+                    }
+                    else{
+                        //TODO 로그인 실패
                     }
                 }
             }
-            else{
-                UserApiClient.instance.loginWithKakaoAccount(this, callback = mCallback)
-            }
         }
-    }
-
-    private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        if(error != null) Log.e("Login", "로그인 실패", error)
-        else if(token != null) Log.i("Login", "로그인 성공 ${token.accessToken}")
     }
 }

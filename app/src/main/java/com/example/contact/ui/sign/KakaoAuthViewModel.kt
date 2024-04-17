@@ -2,6 +2,8 @@ package com.example.contact.ui.sign
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.util.MyApplication
@@ -25,7 +27,11 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
     private val _logInStatus = MutableStateFlow(false)
     val logInStatus: StateFlow<Boolean> = _logInStatus
 
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean> = _loading
+
     fun kakaoLogin(context: Context){
+        _loading.value = true
         viewModelScope.launch {
             _logInStatus.emit(handleKakaoLogin(context))
         }
@@ -75,6 +81,7 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
                                     continuation.resume(true)
                                 }
                                 else{
+                                    onError()
                                     continuation.resume(false)
                                 }
                             }
@@ -88,8 +95,7 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
             }
         }
 
-    private fun onError(message: String) {
-        //countryLoadError.value = message
-        //loading.value = false
+    fun onError() {
+        _loading.value = false
     }
 }

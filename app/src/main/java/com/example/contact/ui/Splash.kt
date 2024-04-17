@@ -8,8 +8,9 @@ import com.example.contact.ui.sign.Login
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,13 +21,9 @@ class Splash : AppCompatActivity() {
 
     private fun checkToken(){
         val loginIntent = Intent(this, Login::class.java)
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
         val mainIntent = Intent(this, MainActivity::class.java)
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
         if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { _, error ->
+            UserApiClient.instance.accessTokenInfo { token, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) startActivity(loginIntent)
                     else {

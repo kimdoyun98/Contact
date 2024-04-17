@@ -19,9 +19,13 @@ class Login: AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.kakaoViewModel = viewModel
+        binding.lifecycleOwner = this
+
         binding.kakaoLogin.setOnClickListener {
             binding.kakaoLogin.setOnClickListener {
                 viewModel.kakaoLogin(this@Login)
+
             }
 
             lifecycleScope.launch {
@@ -33,6 +37,7 @@ class Login: AppCompatActivity() {
                     }
                     else{
                         //TODO 로그인 실패
+                        viewModel.onError()
                     }
                 }
             }

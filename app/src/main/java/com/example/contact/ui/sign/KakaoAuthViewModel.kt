@@ -6,8 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.contact.data.user.UserInfo
 import com.example.contact.util.MyApplication
 import com.example.contact.util.RetrofitUrl
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestore
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -69,15 +74,17 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
                     }
                     else if (token != null) {
                         Log.i("Login", "로그인 성공 ${token.accessToken}")
-
                         viewModelScope.launch {
                             val response = retrofit.getCustomToken(token.accessToken)
                             withContext(Dispatchers.Main){
                                 if(response.isSuccessful){
                                     val firebaseToken = response.body()?.token
-                                    Log.i("Firebase token", firebaseToken.toString())
 
+                                    MyApplication.prefs.setString("kakao_token", token.accessToken)
                                     MyApplication.prefs.setString("fb_token", firebaseToken)
+
+                                    firebaseLogin(firebaseToken)
+
                                     continuation.resume(true)
                                 }
                                 else{
@@ -97,5 +104,41 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
 
     fun onError() {
         _loading.value = false
+    }
+
+    private fun firebaseLogin(token: String?){
+        val auth = Firebase.auth
+
+        /**
+         * Token으로 로그인 처리
+         */
+        auth.signInWithCustomToken(token!!)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    /**
+                     * DB에 유저 등록이 안되어 있으면 등록
+                     */
+                    val currentUser = auth.currentUser
+                    val db = Firebase.firestore
+
+                    val user = UserInfo(
+                        currentUser?.email,
+                        currentUser?.displayName,
+                        arrayListOf()
+                    )
+
+                    val userInfo = db.collection("Users").document(currentUser!!.uid)
+                    userInfo.get()
+                        .addOnSuccessListener { document ->
+                            if(document.data == null) userInfo.set(user)
+                        }
+
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.e("Login", "signInWithCustomToken:failure", task.exception)
+
+                }
+            }
+
     }
 }

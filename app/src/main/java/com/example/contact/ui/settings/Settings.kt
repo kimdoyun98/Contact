@@ -11,6 +11,8 @@ import com.example.contact.R
 import com.example.contact.databinding.FragmentSettingsBinding
 import com.example.contact.ui.sign.Login
 import com.example.contact.util.MyApplication
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.kakao.sdk.user.UserApiClient
 
 class Settings : Fragment() {
@@ -21,6 +23,7 @@ class Settings : Fragment() {
 
 
         binding.logout.setOnClickListener{
+            Firebase.auth.signOut()
             UserApiClient.instance.logout { error ->
                 if (error == null) {
                     Toast.makeText(MyApplication.getInstance(), "로그아웃 완료", Toast.LENGTH_SHORT).show()

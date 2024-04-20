@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="AddFriendViewModel"
+            type="com.example.contact.ui.home.friend.AddFriendViewModel"/>
+        <import type="android.view.View"/>
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        tools:context=".ui.home.friend.AddFriend">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/add_friend_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="친구 추가" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/friendSearchView"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edittext_rectangle"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_friend_toolbar"
+            app:queryHint="친구 검색.." />
+
+        <LinearLayout
+            android:id="@+id/friend_search_result"
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/add_friend_rectangle"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="@{AddFriendViewModel.searchResult ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendSearchView" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:text="@{AddFriendViewModel.searchData.displayName}"
+                android:textColor="@color/light_gray"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:text="@{AddFriendViewModel.searchData.email}"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/friend_add_button"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/light_purple_button_rectangle"
+                android:text="추가"
+                android:textColor="@color/light_gray"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="검색 결과가 없습니다."
+            android:textColor="@color/gray"
+            android:textSize="20dp"
+            android:visibility="@{AddFriendViewModel.searchResult ? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friend_search_result" />
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:indeterminateDrawable="@drawable/loading"
+            android:indeterminateDuration="5000"
+            android:visibility="@{AddFriendViewModel.loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

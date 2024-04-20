@@ -10,7 +10,9 @@ import com.example.contact.data.user.UserInfo
 import com.example.contact.util.MyApplication
 import com.example.contact.util.RetrofitUrl
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 import com.kakao.sdk.auth.model.OAuthToken
@@ -28,7 +30,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
-class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl): ViewModel() {
+class KakaoAuthViewModel @Inject constructor(
+    private val retrofit: RetrofitUrl,
+    private val fireStore: FirebaseFirestore,
+    private val fireAuth: FirebaseAuth
+): ViewModel() {
     private val _logInStatus = MutableStateFlow(false)
     val logInStatus: StateFlow<Boolean> = _logInStatus
 
@@ -107,36 +113,34 @@ class KakaoAuthViewModel @Inject constructor(private val retrofit: RetrofitUrl):
     }
 
     private fun firebaseLogin(token: String?){
-        val auth = Firebase.auth
-
         /**
          * Token으로 로그인 처리
          */
-        auth.signInWithCustomToken(token!!)
+        fireAuth.signInWithCustomToken(token!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     /**
                      * DB에 유저 등록이 안되어 있으면 등록
                      */
-                    val currentUser = auth.currentUser
-                    val db = Firebase.firestore
+                    val currentUser = fireAuth.currentUser
 
                     val user = UserInfo(
+                        currentUser?.uid,
                         currentUser?.email,
-                        currentUser?.displayName,
-                        arrayListOf()
+                        currentUser?.displayName
                     )
 
-                    val userInfo = db.collection("Users").document(currentUser!!.uid)
+                    val userInfo = fireStore.collection("Users").document(currentUser!!.uid)
                     userInfo.get()
                         .addOnSuccessListener { document ->
-                            if(document.data == null) userInfo.set(user)
+                            if(document.data == null) {
+                                userInfo.set(user)
+                            }
                         }
 
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.e("Login", "signInWithCustomToken:failure", task.exception)
-
                 }
             }
 

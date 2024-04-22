@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.UserInfo
+import com.example.contact.di.FirebaseToken
 import com.example.contact.util.MyApplication
-import com.example.contact.util.RetrofitUrl
+import com.example.contact.util.retrofit.RetrofitUrl
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -31,7 +32,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class KakaoAuthViewModel @Inject constructor(
-    private val retrofit: RetrofitUrl,
+    @FirebaseToken private val retrofit: RetrofitUrl,
     private val fireStore: FirebaseFirestore,
     private val fireAuth: FirebaseAuth
 ): ViewModel() {

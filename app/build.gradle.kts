@@ -28,6 +28,7 @@ android {
 
         buildConfigField("String", "KakaoNativeAppKey", getApiKey("KakaoNativeAppKey"))
         buildConfigField("String", "LocalServerIP", getApiKey("LocalServerIP"))
+        buildConfigField("String", "FirebaseCloudMessaging", getApiKey("FirebaseCloudMessaging"))
         manifestPlaceholders["KakaoNativeAppKey"] = getApiKey("KakaoNativeAppKey")
     }
 
@@ -104,6 +105,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
 
     //Retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -113,4 +115,9 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-android-compiler:2.46")
+
+    //tedPermission
+    implementation("io.github.ParkSangGwon:tedpermission-normal:3.3.0")
+    implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
+
 }

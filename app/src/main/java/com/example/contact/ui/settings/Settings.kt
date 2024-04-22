@@ -28,10 +28,9 @@ class Settings : Fragment() {
                 if (error == null) {
                     Toast.makeText(MyApplication.getInstance(), "로그아웃 완료", Toast.LENGTH_SHORT).show()
                     MyApplication.prefs.setString("fb_token", null)
-
-                    startActivity(Intent(MyApplication.getInstance(), Login::class.java))
-                    activity?.finish()
                 }
+                startActivity(Intent(MyApplication.getInstance(), Login::class.java))
+                activity?.finish()
             }
         }
     }

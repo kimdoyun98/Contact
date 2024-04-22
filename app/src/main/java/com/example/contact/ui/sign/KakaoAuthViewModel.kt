@@ -43,7 +43,7 @@ class KakaoAuthViewModel @Inject constructor(
     val loading: LiveData<Boolean> = _loading
 
     fun kakaoLogin(context: Context){
-        _loading.value = true
+        startLoading()
         viewModelScope.launch {
             _logInStatus.emit(handleKakaoLogin(context))
         }
@@ -109,6 +109,9 @@ class KakaoAuthViewModel @Inject constructor(
             }
         }
 
+    fun startLoading(){
+        _loading.value = true
+    }
     fun onError() {
         _loading.value = false
     }
@@ -123,27 +126,31 @@ class KakaoAuthViewModel @Inject constructor(
                     /**
                      * DB에 유저 등록이 안되어 있으면 등록
                      */
-                    val currentUser = fireAuth.currentUser
-
-                    val user = UserInfo(
-                        currentUser?.uid,
-                        currentUser?.email,
-                        currentUser?.displayName
-                    )
-
-                    val userInfo = fireStore.collection("Users").document(currentUser!!.uid)
-                    userInfo.get()
-                        .addOnSuccessListener { document ->
-                            if(document.data == null) {
-                                userInfo.set(user)
-                            }
-                        }
+                    addFirebaseDB()
 
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.e("Login", "signInWithCustomToken:failure", task.exception)
                 }
             }
+    }
 
+    fun addFirebaseDB(){
+        val currentUser = fireAuth.currentUser
+
+        val user = UserInfo(
+            currentUser?.uid,
+            currentUser?.uid,
+            currentUser?.email,
+            currentUser?.displayName
+        )
+
+        val userInfo = fireStore.collection("Users").document(currentUser!!.uid)
+        userInfo.get()
+            .addOnSuccessListener { document ->
+                if(document.data == null) {
+                    userInfo.set(user)
+                }
+            }
     }
 }

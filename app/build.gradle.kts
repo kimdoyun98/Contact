@@ -29,6 +29,7 @@ android {
         buildConfigField("String", "KakaoNativeAppKey", getApiKey("KakaoNativeAppKey"))
         buildConfigField("String", "LocalServerIP", getApiKey("LocalServerIP"))
         buildConfigField("String", "FirebaseCloudMessaging", getApiKey("FirebaseCloudMessaging"))
+        buildConfigField("String", "web_client_id", getApiKey("web_client_id"))
         manifestPlaceholders["KakaoNativeAppKey"] = getApiKey("KakaoNativeAppKey")
     }
 
@@ -95,6 +96,9 @@ dependencies {
 
     //kakao api
     implementation("com.kakao.sdk:v2-user:2.20.1")
+
+    //google login
+    implementation("com.google.android.gms:play-services-auth:21.1.0")
 
     //navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")

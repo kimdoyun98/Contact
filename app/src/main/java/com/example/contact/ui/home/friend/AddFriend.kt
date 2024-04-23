@@ -22,6 +22,7 @@ class AddFriend : AppCompatActivity() {
 
         binding.addFriendViewModel = viewModel
         binding.lifecycleOwner = this
+        binding.activity = this@AddFriend
 
         binding.friendSearchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {return false}

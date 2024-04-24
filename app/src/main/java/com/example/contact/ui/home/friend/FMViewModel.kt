@@ -3,7 +3,9 @@ package com.example.contact.ui.home.friend
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.contact.data.user.Friend
 import com.example.contact.data.user.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -23,6 +25,10 @@ class FMViewModel @Inject constructor(
 
     private val _reqFriendStatus = MutableLiveData(false)
     val reqFriendStatus: LiveData<Boolean> = _reqFriendStatus
+
+    private val myFriend = firebaseStore.collection("Users").document(firebaseAuth.currentUser!!.uid)
+        .collection("Friend")
+    val friendList: LiveData<Friend?> = myFriend.document("friend").asFlow<Friend>().asLiveData()
 
     private var resDocument: DocumentReference
 

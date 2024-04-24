@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.contact.adapter.FriendListAdapter
 import com.example.contact.adapter.RequestFriendAdapter
 import com.example.contact.databinding.ActivityFriendManagementBinding
 import com.example.contact.ui.home.friend.add.AddFriend
@@ -57,6 +58,17 @@ class FriendManagement : AppCompatActivity() {
                 viewModel.requestButton(uid, false)
             }
         })
+
+        /**
+         * 친구 목록
+         */
+
+        val friendListAdapter = FriendListAdapter()
+        binding.friendRecyclerView.adapter = friendListAdapter
+
+        viewModel.friendList.observe(this){
+            friendListAdapter.setUidList(it?.friend, this)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

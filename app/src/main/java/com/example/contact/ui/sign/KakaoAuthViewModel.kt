@@ -10,12 +10,14 @@ import com.example.contact.data.user.UserInfo
 import com.example.contact.di.FirebaseToken
 import com.example.contact.util.MyApplication
 import com.example.contact.util.retrofit.RetrofitUrl
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -152,5 +154,21 @@ class KakaoAuthViewModel @Inject constructor(
                     userInfo.set(user)
                 }
             }
+
+        /**
+         * FCM token 저장
+         */
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            fireStore.collection("Users").document(fireAuth.currentUser!!.uid)
+                .collection("CloudMessaging").document("Token")
+                .set("token" to token)
+        })
     }
 }

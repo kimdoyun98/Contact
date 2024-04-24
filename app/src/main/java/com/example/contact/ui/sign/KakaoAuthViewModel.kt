@@ -9,14 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.UserInfo
 import com.example.contact.di.FirebaseToken
 import com.example.contact.util.MyApplication
+import com.example.contact.util.firebase.FirebaseRepository
 import com.example.contact.util.retrofit.RetrofitUrl
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -35,8 +30,7 @@ import kotlin.coroutines.suspendCoroutine
 @HiltViewModel
 class KakaoAuthViewModel @Inject constructor(
     @FirebaseToken private val retrofit: RetrofitUrl,
-    private val fireStore: FirebaseFirestore,
-    private val fireAuth: FirebaseAuth
+    private val firebaseRepository: FirebaseRepository
 ): ViewModel() {
     private val _logInStatus = MutableStateFlow(false)
     val logInStatus: StateFlow<Boolean> = _logInStatus
@@ -122,7 +116,8 @@ class KakaoAuthViewModel @Inject constructor(
         /**
          * Token으로 로그인 처리
          */
-        fireAuth.signInWithCustomToken(token!!)
+
+        firebaseRepository.fireAuth.signInWithCustomToken(token!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     /**
@@ -138,16 +133,16 @@ class KakaoAuthViewModel @Inject constructor(
     }
 
     fun addFirebaseDB(){
-        val currentUser = fireAuth.currentUser
+        val myInfo = firebaseRepository.getMyInfo
 
         val user = UserInfo(
-            currentUser?.uid,
-            currentUser?.uid,
-            currentUser?.email,
-            currentUser?.displayName
+            myInfo.uid,
+            myInfo.uid,
+            myInfo.email,
+            myInfo.displayName
         )
 
-        val userInfo = fireStore.collection("Users").document(currentUser!!.uid)
+        val userInfo = firebaseRepository.getUserInfo(myInfo.uid)
         userInfo.get()
             .addOnSuccessListener { document ->
                 if(document.data == null) {
@@ -166,7 +161,7 @@ class KakaoAuthViewModel @Inject constructor(
             // Get new FCM registration token
             val token = task.result
 
-            fireStore.collection("Users").document(fireAuth.currentUser!!.uid)
+            firebaseRepository.getUserInfo(myInfo.uid)
                 .collection("CloudMessaging").document("Token")
                 .set("token" to token)
         })

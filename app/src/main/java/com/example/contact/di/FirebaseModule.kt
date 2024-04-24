@@ -1,10 +1,9 @@
 package com.example.contact.di
 
+import com.example.contact.util.firebase.FirebaseRepository
 import com.example.contact.util.retrofit.RetrofitManager.firebaseCloudMessaging
 import com.example.contact.util.retrofit.RetrofitManager.getFirebaseToken
 import com.example.contact.util.retrofit.RetrofitUrl
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,16 +21,12 @@ object FirebaseModule {
 
     @Singleton
     @Provides
-    fun firebaseFireStoreInstance(): FirebaseFirestore = FirebaseFirestore.getInstance()
-
-    @Singleton
-    @Provides
-    fun firebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
-    @Singleton
-    @Provides
     @FirebaseCloudMessage
     fun fcm(): RetrofitUrl = firebaseCloudMessaging().create(RetrofitUrl::class.java)
+
+    @Singleton
+    @Provides
+    fun getFirebaseInstance(): FirebaseRepository = FirebaseRepository.getInstance()
 }
 
 @Qualifier

@@ -7,9 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.Friend
 import com.example.contact.data.user.Response
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.contact.util.firebase.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.launch
@@ -17,35 +15,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FMViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
-    private val firebaseStore: FirebaseFirestore
+    private val firebaseRepository: FirebaseRepository
 ): ViewModel() {
+    private val myUid = firebaseRepository.getMyInfo.uid
+    private val myFriend = firebaseRepository.getUserFriend(myUid)
+
     private val _reqFriend = MutableLiveData<MutableList<String>>()
     val reqFriend: LiveData<MutableList<String>> = _reqFriend
 
     private val _reqFriendStatus = MutableLiveData(false)
     val reqFriendStatus: LiveData<Boolean> = _reqFriendStatus
 
-    private val myFriend = firebaseStore.collection("Users").document(firebaseAuth.currentUser!!.uid)
-        .collection("Friend")
     val friendList: LiveData<Friend?> = myFriend.document("friend").asFlow<Friend>().asLiveData()
 
-    private var resDocument: DocumentReference
 
     init {
-        val uid = firebaseAuth.currentUser!!.uid
-        resDocument = firebaseStore.collection("Users").document(uid)
-            .collection("Friend").document("response")
-
         viewModelScope.launch {
-            resDocument.asFlow<Response>().collect {
-                if(it != null) {
-                    if(it.response.size != 0){
-                        _reqFriend.value = it.response
-                        _reqFriendStatus.value = true
+            myFriend.document("response")
+                .asFlow<Response>().collect {
+                    if(it != null) {
+                        if(it.response.size != 0){
+                            _reqFriend.value = it.response
+                            _reqFriendStatus.value = true
+                        }
                     }
                 }
-            }
         }
     }
 
@@ -53,10 +47,7 @@ class FMViewModel @Inject constructor(
      * 친구 요청 수락&거절 버튼 클릭 작업
      */
     fun requestButton(uid: String, boolean: Boolean){
-        val myFriend = firebaseStore.collection("Users").document(firebaseAuth.currentUser!!.uid)
-            .collection("Friend")
-        val userFriend = firebaseStore.collection("Users").document(uid)
-            .collection("Friend")
+        val userFriend = firebaseRepository.getUserFriend(uid)
 
         myFriend.document("response").get().addOnSuccessListener {
             val list = it.data!!["response"] as ArrayList<String>
@@ -69,7 +60,7 @@ class FMViewModel @Inject constructor(
         userFriend.document("request").get().addOnSuccessListener {
             val list = it.data!!["request"] as ArrayList<String>
 
-            val index = list.indexOf(firebaseAuth.currentUser!!.uid)
+            val index = list.indexOf(myUid)
             list.removeAt(index)
             userFriend.document("request").set(hashMapOf("request" to list))
         }
@@ -94,7 +85,7 @@ class FMViewModel @Inject constructor(
                         list.addAll(document.data!!["friend"] as ArrayList<String>)
                     }
 
-                    list.add(firebaseAuth.currentUser!!.uid)
+                    list.add(myUid)
                     userFriend.document("friend").set(hashMapOf("friend" to list.toList()))
                 }
         }

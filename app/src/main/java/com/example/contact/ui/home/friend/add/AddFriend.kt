@@ -1,10 +1,10 @@
-package com.example.contact.ui.home.friend
+package com.example.contact.ui.home.friend.add
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import com.example.contact.R
 import com.example.contact.databinding.ActivityAddFriendBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,5 +33,11 @@ class AddFriend : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home) finish()
+
+        return super.onOptionsItemSelected(item)
     }
 }

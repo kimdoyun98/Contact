@@ -1,14 +1,16 @@
-package com.example.contact.ui.home.friend
+package com.example.contact.ui.home.friend.add
 
-import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.BuildConfig
 import com.example.contact.data.fcm.Fcm
+import com.example.contact.data.user.Friend
+import com.example.contact.data.user.Request
 import com.example.contact.data.user.UserInfo
 import com.example.contact.di.FirebaseCloudMessage
 import com.example.contact.util.retrofit.RetrofitUrl
@@ -16,17 +18,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddFriendViewModel @Inject constructor(
-    private val application: Application,
     private val fireStore: FirebaseFirestore,
     private val fireAuth: FirebaseAuth,
     @FirebaseCloudMessage private val retrofitUrl: RetrofitUrl
-): AndroidViewModel(application) {
+): ViewModel() {
+    // 나의 Document
+    private val myUser = fireStore.collection("Users").document(fireAuth.currentUser!!.uid)
+    private val myFriendReq = myUser.collection("Friend").document("request")
+
+
     private val _searchResult = MutableLiveData(false)
     val searchResult: LiveData<Boolean> = _searchResult
 
@@ -38,67 +46,71 @@ class AddFriendViewModel @Inject constructor(
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
 
+    // 친구 요청 중인 친구
     private val _addFriendStatus = MutableLiveData(false)
     val addFriendStatus: LiveData<Boolean> = _addFriendStatus
 
-    // 나의 Document
-    private val myUser = fireStore.collection("Users").document(fireAuth.currentUser!!.uid)
-    private val myFriendReq = myUser.collection("Friend").document("request")
+    // 이미 친구
+    val friendStatus: LiveData<Friend?> = myUser.collection("Friend").document("friend")
+                    .asFlow<Friend>().asLiveData()
 
     // 검색한 친구 Document
     private lateinit var friendUser: DocumentReference
     private lateinit var friendRes: DocumentReference
 
+    private fun searchUsers(id: String) = fireStore.collection("Users").whereEqualTo("uniqueID", id)
 
-    private fun searchUsers(id: String) = fireStore.collection("Users").whereEqualTo("uniqueID", id).get()
+    /**
+     * 유저 검색
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun getFriendSearch(query: String?){
         _loading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            searchUsers(query!!).addOnSuccessListener { documents ->
-                    _searchResult.value = true
-                    documents.forEach{
-                        val data = it.data
-                        _searchData.value = UserInfo(
-                            it.id, query, "${data["email"]}", "${data["displayName"]}"
-                        )
-                        //TODO 추가 눌러 놓은 친구라면
-                        myFriendReq.get().addOnSuccessListener { document ->
-                            if(document.data != null){
-                                val request = document.data!!["request"] as ArrayList<String>
-                                _addFriendStatus.value = request.contains(it.id)
-                            }
-                        }
-                    }
+        viewModelScope.launch {
+            searchUsers(query!!).asFlow<UserInfo>().collect{
+                val userInfo = it[0]
+                _searchResult.value = true
+
+                _searchData.value = UserInfo(
+                    userInfo.uid, userInfo.uniqueID, userInfo.email, userInfo.displayName
+                )
+
+                // 이미 친추 요청한 친구
+                myFriendReq.asFlow<Request>().collect{ request ->
+                    if(request != null) _addFriendStatus.value = request.request.contains(userInfo.uid)
                 }
+            }
         }
         _loading.value = false
     }
 
+    /**
+     * 친구 추가 버튼 (이미 요청해놓은 상태라면 요청취소)
+     */
     fun addFriend(context: Context){
         // 친구 Document
         friendUser = fireStore.collection("Users").document(searchData.value?.uid!!)
         friendRes = friendUser.collection("Friend").document("response")
 
         if(addFriendStatus.value!!){
-            //TODO 친구 요청 취소
+            //친구 요청 취소
             AlertDialog.Builder(context)
                 .setTitle("친구 요청 취소")
                 .setMessage("친구 요청을 취소하시겠습니까?")
                 .setPositiveButton("예") { _, _ ->
-                    //TODO DB 삭제
+                    //DB 삭제
                     requestCancel()
                     _addFriendStatus.value = false
                 }
                 .setNegativeButton("아니오") { _, _ ->
                     //TODO Negavive Action
-
                 }
                 .create()
                 .show()
         }
         else{
             viewModelScope.launch(Dispatchers.IO) {
-                //TODO 친구 요청 송신 Field
+                //친구 요청 송신 Field
                 myFriendReq.get().addOnSuccessListener { document ->
                     val reqList = ArrayList<String>()
                     if(document.data != null) {
@@ -109,7 +121,7 @@ class AddFriendViewModel @Inject constructor(
                     myFriendReq.set(hashMapOf("request" to reqList))
                 }
 
-                //TODO 친구 요청 수신 Field
+                //친구 요청 수신 Field
                 friendRes.get().addOnSuccessListener { document ->
                     val resList = ArrayList<String>()
                     if(document.data != null) {
@@ -120,7 +132,7 @@ class AddFriendViewModel @Inject constructor(
                     friendRes.set(hashMapOf("response" to resList))
                 }
 
-                //TODO Firebase Cloud Messaging
+                //Firebase Cloud Messaging
                 friendUser
                     .collection("CloudMessaging").document("Token")
                     .get().addOnSuccessListener { tokenDocument ->
@@ -150,6 +162,9 @@ class AddFriendViewModel @Inject constructor(
         _addFriendStatus.value = true
     }
 
+    /**
+     * 친구 요청 취소
+     */
     private fun requestCancel() = viewModelScope.launch(Dispatchers.IO) {
         myFriendReq.get().addOnSuccessListener { document ->
             val list = document.data!!["request"] as ArrayList<String>

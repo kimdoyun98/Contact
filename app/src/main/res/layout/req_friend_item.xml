@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="displayName"
+            type="String" />
+        <variable
+            name="uid"
+            type="String" />
+        <variable
+            name="clickStatus"
+            type="Boolean" />
+        <import type="android.view.View"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:background="@drawable/button_rectangle"
+            android:padding="20dp"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{displayName}"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="님의 친구 요청"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{clickStatus ? View.GONE : View.VISIBLE}"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/acceptButton"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/light_purple_button_rectangle"
+                    android:text="수락"
+                    />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/refuseButton"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/light_purple_button_rectangle"
+                    android:text="거절"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{clickStatus ? View.VISIBLE : View.GONE}"
+                android:text="@{clickStatus ? @string/accept_button_click : @string/refuse_button_click}"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

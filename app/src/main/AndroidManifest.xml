@@ -19,7 +19,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.home.friend.AddFriend"
+            android:name=".ui.home.friend.add.AddFriend"
             android:exported="false" />
         <activity
             android:name=".ui.home.friend.FriendManagement"

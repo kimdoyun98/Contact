@@ -5,11 +5,11 @@
     <data>
         <variable
             name="AddFriendViewModel"
-            type="com.example.contact.ui.home.friend.AddFriendViewModel"/>
+            type="com.example.contact.ui.home.friend.add.AddFriendViewModel"/>
         <import type="android.view.View"/>
         <variable
             name="activity"
-            type="com.example.contact.ui.home.friend.AddFriend" />
+            type="com.example.contact.ui.home.friend.add.AddFriend" />
     </data>
 
 
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light_gray"
-        tools:context=".ui.home.friend.AddFriend">
+        tools:context=".ui.home.friend.add.AddFriend">
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/add_friend_toolbar"
             android:layout_width="match_parent"
@@ -81,6 +81,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:background="@drawable/light_purple_button_rectangle"
+                android:visibility="@{AddFriendViewModel.friendStatus.friend.contains(AddFriendViewModel.searchData.uid) ? View.GONE : View.VISIBLE}"
                 android:text="@{AddFriendViewModel.addFriendStatus ? @string/progress_add_friend : @string/add}"
                 android:textColor="@color/light_gray"
                 android:textStyle="bold"

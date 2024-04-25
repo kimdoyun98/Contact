@@ -8,8 +8,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.contact.R
 import com.example.contact.util.MyApplication
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,8 +16,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
-    @Inject lateinit var fireStore: FirebaseFirestore
-    @Inject lateinit var firebaseAuth: FirebaseAuth
+    @Inject lateinit var firebaseRepository: FirebaseRepository
 
     private val CHANNEL_ID = "FCM_ID"
     private val CHANNEL_NAME = "FCM"
@@ -28,10 +25,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         Log.e("MyFirebaseMessagingService", "token: $token")
         super.onNewToken(token)
         // 내 uid 구하기
-        val user = firebaseAuth.currentUser
+        val user = firebaseRepository.fireAuth.currentUser
 
         // 서버로 토큰 저장
-        fireStore.collection("Users").document(user!!.uid)
+        firebaseRepository.getUserInfo(user!!.uid)
             .collection("CloudMessaging").document("Token")
             .set("token" to token)
     }

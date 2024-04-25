@@ -9,15 +9,12 @@ import com.example.contact.adapter.FriendListAdapter
 import com.example.contact.adapter.RequestFriendAdapter
 import com.example.contact.databinding.ActivityFriendManagementBinding
 import com.example.contact.ui.home.friend.add.AddFriend
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendManagement : AppCompatActivity() {
     private lateinit var binding: ActivityFriendManagementBinding
     private val viewModel: FMViewModel by viewModels()
-    @Inject lateinit var fireStore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFriendManagementBinding.inflate(layoutInflater)

@@ -2,11 +2,14 @@ package com.example.contact.util.firebase
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.contact.R
+import com.example.contact.ui.MainActivity
 import com.example.contact.util.MyApplication
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -45,11 +48,16 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             notificationManager.createNotificationChannel(
                 NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
             )
+            val intent = Intent(MyApplication.getInstance(), MainActivity::class.java).apply{
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            val pendingIntent = PendingIntent.getActivity(MyApplication.getInstance(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.group)
                 .setContentTitle(this.data["title"])
                 .setContentText(this.data["body"])
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(false)
                 .setShowWhen(true)
                 .setColor(ContextCompat.getColor(context, R.color.purple_200))

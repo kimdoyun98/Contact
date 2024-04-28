@@ -1,4 +1,4 @@
-package com.example.contact.adapter
+package com.example.contact.adapter.friend_manage
 
 import android.view.LayoutInflater
 import android.view.View
@@ -54,12 +54,12 @@ class RequestFriendAdapter: RecyclerView.Adapter<RequestFriendAdapter.ViewHolder
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestFriendAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ReqFriendItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: RequestFriendAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(position)
     }
 

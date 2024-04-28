@@ -1,4 +1,4 @@
-package com.example.contact.adapter
+package com.example.contact.adapter.add_plan.add_friend_to_plan
 
 import android.view.LayoutInflater
 import android.view.View

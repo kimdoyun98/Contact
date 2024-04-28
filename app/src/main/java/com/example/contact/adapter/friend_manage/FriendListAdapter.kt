@@ -1,4 +1,4 @@
-package com.example.contact.adapter
+package com.example.contact.adapter.friend_manage
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -44,12 +44,12 @@ class FriendListAdapter: RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = FriendListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: FriendListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(position)
 
         binding.moreButton.setOnClickListener {

@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Contact" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Contact" parent="Theme.MaterialComponents.Light.NoActionBar" />
 
     <style name="BottomSheetTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TimePickerStyle">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColorPrimary">@color/light_purple</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+    </style>
+    <style name="MyActionBar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="tint">@color/black</item>
+        <item name="iconTint">@color/white</item>
     </style>
 </resources>

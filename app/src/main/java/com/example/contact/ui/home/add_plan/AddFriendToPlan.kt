@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.contact.R
-import com.example.contact.adapter.ChoiceFriendListAdapter
-import com.example.contact.adapter.FriendListToPlanAdapter
+import com.example.contact.adapter.add_plan.add_friend_to_plan.ChoiceFriendListAdapter
+import com.example.contact.adapter.add_plan.add_friend_to_plan.FriendListToPlanAdapter
 import com.example.contact.databinding.ActivityAddFriendToPlanBinding
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.android.material.snackbar.Snackbar
@@ -58,7 +58,7 @@ class AddFriendToPlan : AppCompatActivity() {
         binding.withFriendRecycler.adapter = choiceFriendListAdapter
 
         viewModel.checkCurrentFriend.observe(this){
-            choiceFriendListAdapter.setUidList(it)
+            choiceFriendListAdapter.setFriendList(it)
         }
 
 

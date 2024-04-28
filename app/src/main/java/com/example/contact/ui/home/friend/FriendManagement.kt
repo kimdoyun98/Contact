@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.contact.adapter.FriendListAdapter
-import com.example.contact.adapter.RequestFriendAdapter
+import com.example.contact.adapter.friend_manage.FriendListAdapter
+import com.example.contact.adapter.friend_manage.RequestFriendAdapter
 import com.example.contact.databinding.ActivityFriendManagementBinding
 import com.example.contact.ui.home.friend.add.AddFriend
 import dagger.hilt.android.AndroidEntryPoint

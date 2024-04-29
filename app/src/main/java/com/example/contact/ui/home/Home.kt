@@ -2,7 +2,6 @@ package com.example.contact.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.example.contact.databinding.FragmentHomeBinding
 import com.example.contact.ui.home.add_plan.AddPlan
 import com.example.contact.ui.home.friend.FriendManagement
 import com.example.contact.util.MyApplication
+import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
@@ -36,13 +36,13 @@ class Home : Fragment() {
         val inviteAdapter = InvitePlanAdapter(viewModel)
         binding.inviteViewpager.adapter = inviteAdapter
 
-        viewModel.getMyInviteList().observe(viewLifecycleOwner){
-            Log.e("inviteList", it.toString())
-            it.toSet().forEach { test ->
-                Log.e("dasdasd", test.id)
-                Log.e("dasdasd", test.data.toString())
+        viewModel.inviteList.observe(viewLifecycleOwner){
+            val list = mutableListOf<DocumentSnapshot>()
+            it?.documents?.forEach { document ->
+                list.add(document)
             }
-            inviteAdapter.setInviteData(it)
+
+            inviteAdapter.setInviteData(list)
         }
 
         viewpagerInit()

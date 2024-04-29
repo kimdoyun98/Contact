@@ -81,13 +81,13 @@ class AddPlanViewModel @Inject constructor(
             val member = arrayListOf(firebaseRepository.getMyInfo.uid)
 
             val t = if(time.isNullOrEmpty()) null else "${time[0]}:${time[1]}"
-            val date = if(start == null) null else start to end
+            val date = if(start == null) arrayListOf<String>() else arrayListOf(start, end)
 
             val plan = Plan(
                 title,
                 member,
                 friendList.value!!,
-                mapOf(date!!),
+                date,
                 t
             )
 

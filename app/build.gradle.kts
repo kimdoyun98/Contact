@@ -125,4 +125,7 @@ dependencies {
     implementation("io.github.ParkSangGwon:tedpermission-normal:3.3.0")
     implementation("io.github.ParkSangGwon:tedpermission-coroutine:3.3.0")
 
+    //viewpager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
 }

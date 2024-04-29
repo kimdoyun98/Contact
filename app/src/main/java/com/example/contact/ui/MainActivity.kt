@@ -12,8 +12,10 @@ import com.example.contact.R
 import com.example.contact.databinding.ActivityMainBinding
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

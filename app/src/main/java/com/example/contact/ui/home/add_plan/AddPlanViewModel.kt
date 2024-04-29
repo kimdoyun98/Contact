@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.BuildConfig
 import com.example.contact.data.fcm.Fcm
+import com.example.contact.data.plan.Plan
 import com.example.contact.di.FirebaseCloudMessage
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
@@ -86,7 +87,7 @@ class AddPlanViewModel @Inject constructor(
                 title,
                 member,
                 friendList.value!!,
-                date,
+                mapOf(date!!),
                 t
             )
 
@@ -134,10 +135,3 @@ class AddPlanViewModel @Inject constructor(
     }
 
 }
-data class Plan(
-    val title: String,
-    val member: ArrayList<String>,
-    val invite: ArrayList<String>,
-    val date: Pair<String?, String?>?,
-    val time: String?
-        )

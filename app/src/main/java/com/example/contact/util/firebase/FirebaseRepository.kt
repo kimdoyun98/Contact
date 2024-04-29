@@ -1,11 +1,13 @@
 package com.example.contact.util.firebase
 
-import com.example.contact.ui.home.add_plan.Plan
+import com.example.contact.data.plan.Plan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import io.github.horaciocome1.fireflow.asFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class FirebaseRepository {
     private val fireStore = FirebaseFirestore.getInstance()
@@ -41,5 +43,12 @@ class FirebaseRepository {
      */
     fun setPlan(plan: Plan): Task<DocumentReference> =
         fireStore.collection("Plan").add(plan)
+
+    fun getInvitePlan(uid: String) =
+        fireStore.collection("Plan").whereArrayContains("invite", uid)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getPlan(planId: String) =
+        fireStore.collection("Plan").document(planId)
 
 }

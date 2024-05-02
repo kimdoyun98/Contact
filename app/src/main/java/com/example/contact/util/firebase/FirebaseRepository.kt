@@ -47,8 +47,10 @@ class FirebaseRepository {
     fun getInvitePlan(uid: String) =
         fireStore.collection("Plan").whereArrayContains("invite", uid)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun getPlan(planId: String) =
         fireStore.collection("Plan").document(planId)
+
+    fun getMyPlan(uid: String) =
+        fireStore.collection("Plan").whereArrayContains("member", uid)
 
 }

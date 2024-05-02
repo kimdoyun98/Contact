@@ -15,8 +15,10 @@ import com.example.contact.databinding.FragmentHomeBinding
 import com.example.contact.ui.home.add_plan.AddPlan
 import com.example.contact.ui.home.friend.FriendManagement
 import com.example.contact.util.MyApplication
+import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -24,6 +26,8 @@ class Home : Fragment() {
     private val tag = "Home"
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+
+    @Inject lateinit var firebaseRepository: FirebaseRepository
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -33,7 +37,7 @@ class Home : Fragment() {
         /**
          * 초대 알림
          */
-        val inviteAdapter = InvitePlanAdapter(viewModel)
+        val inviteAdapter = InvitePlanAdapter(viewModel, firebaseRepository)
         binding.inviteViewpager.adapter = inviteAdapter
 
         viewModel.inviteList.observe(viewLifecycleOwner){

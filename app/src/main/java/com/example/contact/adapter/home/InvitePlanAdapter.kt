@@ -5,12 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.data.plan.Plan
+import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.InvitePlanItemBinding
 import com.example.contact.ui.home.HomeViewModel
+import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.DocumentSnapshot
+import io.github.horaciocome1.fireflow.asFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InvitePlanAdapter(
-    private val viewModel: HomeViewModel
+    private val viewModel: HomeViewModel,
+    private val firebaseRepository: FirebaseRepository
 ): RecyclerView.Adapter<InvitePlanAdapter.ViewHolder>() {
     private lateinit var binding: InvitePlanItemBinding
     private var inviteDocumentList = mutableListOf<DocumentSnapshot>()
@@ -23,9 +30,19 @@ class InvitePlanAdapter(
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         fun bind(position: Int){
             binding.title.text = inviteDocumentList[position].data!!["title"].toString()
-            //TODO 멤버 변수 String으로 변환해야함
-            binding.member.text = inviteDocumentList[position].data!!["member"].toString()
 
+            val member = StringBuilder()
+            val memberUidList = inviteDocumentList[position].data!!["member"] as ArrayList<String>
+            memberUidList.forEach { uid ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    firebaseRepository.getUserInfo(uid).asFlow<UserInfo>().collect{
+                        val displayName = it!!.displayName.toString()
+                        member.append("$displayName ")
+
+                        binding.member.text = member.toString()
+                    }
+                }
+            }
         }
     }
 

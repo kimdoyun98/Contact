@@ -11,6 +11,7 @@ import com.example.contact.data.user.UserInfo
 import com.example.contact.util.firebase.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,6 +40,12 @@ class PlanDetailViewModel @Inject constructor(
                     _memberList.value = member.toString()
                 }
             }
+        }
+    }
+
+    fun setDate(start: String, end: String){
+        viewModelScope.launch {
+            firebaseRepository.getPlan(planId!!).update("date", arrayListOf(start, end))
         }
     }
 }

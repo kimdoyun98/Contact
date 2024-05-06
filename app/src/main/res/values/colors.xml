@@ -12,4 +12,5 @@
     <color name="snow">#FFFAFA</color>
     <color name="ghostWhite">#F8F8FF</color>
     <color name="light_gray">#F5F5F5</color>
+    <color name="tab_color">#FFFBCC</color>
 </resources>

@@ -58,10 +58,10 @@ class AddPlan : AppCompatActivity() {
             dateRangePicker.addOnPositiveButtonClickListener {
                 val calendar = Calendar.getInstance()
                 calendar.timeInMillis = it?.first ?: 0
-                binding.startDateText.text = SimpleDateFormat("yyyy년 MM월 dd일").format(calendar.time).toString()
+                binding.startDateText.text = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
 
                 calendar.timeInMillis = it?.second ?: 0
-                binding.endDateText.text = SimpleDateFormat("yyyy년 MM월 dd일").format(calendar.time).toString()
+                binding.endDateText.text = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
 
             }
         }

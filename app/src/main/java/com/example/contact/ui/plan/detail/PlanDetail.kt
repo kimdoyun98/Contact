@@ -1,31 +1,29 @@
 package com.example.contact.ui.plan.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.compose.ui.unit.dp
-import androidx.core.view.marginRight
+import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.R
 import com.example.contact.databinding.ActivityPlanDetailBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Calendar
 
 @AndroidEntryPoint
 class PlanDetail : AppCompatActivity() {
     private lateinit var binding: ActivityPlanDetailBinding
     private val viewModel: PlanDetailViewModel by viewModels()
+    private var planId = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlanDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val planId = intent.getStringExtra("planId")!!
+        planId = intent.getStringExtra("planId")!!
         viewModel.setPlanId(planId)
 
         binding.viewmodel = viewModel
@@ -55,6 +53,7 @@ class PlanDetail : AppCompatActivity() {
 
         val bundle = Bundle().apply {
             putString("date", d[0])
+            putString("planId", planId)
         }
         val fragment = TabFragment()
         fragment.arguments = bundle

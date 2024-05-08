@@ -24,6 +24,8 @@ class TabFragment : Fragment() {
 
         binding.addButton.setOnClickListener {
             val intent = Intent(MyApplication.getInstance(), DetailPlanAdd::class.java)
+            intent.putExtra("date", viewModel.date.value)
+            intent.putExtra("planId", viewModel.planId)
             startActivity(intent)
         }
     }
@@ -34,6 +36,7 @@ class TabFragment : Fragment() {
     ): View? {
         binding = FragmentTabBinding.inflate(layoutInflater, container, false)
         viewModel.setDate(requireArguments().getString("date")!!)
+        viewModel.planId = requireArguments().getString("planId")!!
         return binding.root
     }
 

@@ -8,6 +8,8 @@ class TabViewModel: ViewModel() {
     private var _date = MutableLiveData<String>()
     val date: LiveData<String> = _date
 
+    var planId = ""
+
     fun setDate(string: String){
         _date.value = string
     }

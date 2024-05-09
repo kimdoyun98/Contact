@@ -98,7 +98,7 @@ class DetailPlanAdd : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.let {
-                    viewModel.addImgUri(it.toString())
+                    viewModel.addImgUri(it)
                 }
             }
         }

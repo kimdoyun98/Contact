@@ -5,21 +5,18 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.example.contact.R
 import com.example.contact.ui.plan.detail.add.DetailPlanAddViewModel
 import com.example.contact.ui.plan.detail.add.GalleryClickEvent
-import com.example.contact.util.MyApplication
 
 class DetailPlanAddAdapter constructor(
     private val viewModel: DetailPlanAddViewModel,
     private val context: Context
 ): PhotoAdapter() {
     private var galleryClickEvent: GalleryClickEvent? = null
-    fun setData(list: MutableList<String>){
+    fun setData(list: MutableList<Uri>){
         this.imgUrl = list
         notifyDataSetChanged()
     }
@@ -69,7 +66,7 @@ class DetailPlanAddAdapter constructor(
                         Toast.makeText(context, "이미지를 찾을 수 없습니다.", Toast.LENGTH_LONG).show()
                     }
                     else{
-                        viewModel.addImgUri(pasteUri.toString())
+                        viewModel.addImgUri(pasteUri)
                         dialog.cancel()
                     }
                 }

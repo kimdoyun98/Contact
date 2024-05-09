@@ -3,13 +3,9 @@ package com.example.contact.ui.plan.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.example.contact.data.plan.DetailPlan
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.horaciocome1.fireflow.asFlow
-import io.github.horaciocome1.fireflow.snapshotAsFlow
 import javax.inject.Inject
 
 @HiltViewModel

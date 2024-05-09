@@ -1,5 +1,6 @@
 package com.example.contact.adapter.plan
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.contact.databinding.AddPhotoItemBinding
 import com.example.contact.util.MyApplication
-import com.example.contact.util.firebase.FirebaseRepository
 
 open class PhotoAdapter: RecyclerView.Adapter<PhotoAdapter.ViewHolder>(){
-    var imgUrl = mutableListOf<String>()
+    var imgUrl = mutableListOf<Uri>()
     lateinit var binding: AddPhotoItemBinding
 
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){

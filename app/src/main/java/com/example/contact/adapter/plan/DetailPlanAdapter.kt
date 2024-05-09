@@ -1,16 +1,13 @@
 package com.example.contact.adapter.plan
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.contact.data.plan.DetailPlan
 import com.example.contact.databinding.DetailPlanItemBinding
 import com.example.contact.ui.plan.detail.PlanDetailClick
-import com.example.contact.util.MyApplication
 import com.google.firebase.firestore.DocumentSnapshot
 
 class DetailPlanAdapter (
@@ -39,14 +36,6 @@ class DetailPlanAdapter (
                 time = detailPlanList[position].data!!["time"]!!.toString(),
                 location = detailPlanList[position].data!!["location"]!!.toString()
             )
-            val imgUri = detailPlanList[position].data!!["imgUri"]!! as ArrayList<String>
-            if(imgUri.isNotEmpty()){
-                Log.e("imgUri", imgUri[0])
-                Glide.with(MyApplication.getInstance())
-                    .load(imgUri[0])
-                    .centerCrop()
-                    .into(binding.image)
-            }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.contact.ui.plan.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -50,11 +49,8 @@ class PlanDetail : AppCompatActivity() {
 
         setTabItemMargin(binding.tab, 30)
 
-        val firstY = d[0].toString().substring(0..3)
-        val firstM = d[0].toString().substring(4..7)
-
         val bundle = Bundle().apply {
-            putString("date", "$firstY\n$firstM")
+            putString("date", d[0])
             putString("planId", planId)
         }
         val fragment = TabFragment()
@@ -66,7 +62,8 @@ class PlanDetail : AppCompatActivity() {
 
         binding.tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                fragment.setTabChange(tab!!.text.toString())
+                val text = tab!!.text.toString().split("\n")
+                fragment.setTabChange("${text[0]}${text[1]}")
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

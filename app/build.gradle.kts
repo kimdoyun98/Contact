@@ -111,6 +111,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     implementation("com.github.horaciocome1:fireflow:0.0.6")
+    implementation("com.google.firebase:firebase-storage")
 
     //Retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

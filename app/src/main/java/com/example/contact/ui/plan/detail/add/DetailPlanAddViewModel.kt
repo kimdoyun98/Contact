@@ -1,5 +1,7 @@
 package com.example.contact.ui.plan.detail.add
 
+import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +14,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -22,8 +26,8 @@ class DetailPlanAddViewModel @Inject constructor(
 ): ViewModel() {
     private var date = ""
     private var planId = ""
-    private var _imgUri = MutableLiveData<MutableList<String>>(mutableListOf())
-    val imgUri: LiveData<MutableList<String>> = _imgUri
+    private var _imgUri = MutableLiveData<MutableList<Uri>>(mutableListOf())
+    val imgUri: LiveData<MutableList<Uri>> = _imgUri
 
     private val _registerStatus = MutableStateFlow<Boolean>(false)
     val registerStatus: StateFlow<Boolean> = _registerStatus
@@ -33,7 +37,7 @@ class DetailPlanAddViewModel @Inject constructor(
         this.planId = planId
     }
 
-    fun addImgUri(uri: String){
+    fun addImgUri(uri: Uri){
         val list = imgUri.value
         list?.add(uri)
         _imgUri.value = list!!
@@ -52,14 +56,25 @@ class DetailPlanAddViewModel @Inject constructor(
                         DetailPlan(
                             "${time[0]}:${time[1]}",
                             location,
-                            address,
-                            imgUri.value
+                            address
                         )
                     )
                     .addOnSuccessListener {
                         continuation.resume(true)
                         Toast.makeText(MyApplication.getInstance(), "성공!", Toast.LENGTH_SHORT)
                             .show()
+
+                        imgUri.value?.forEach { uri ->
+                            val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+                            val fileName = "IMG_" + sdf.format(Date()) + ".png"
+                            firebaseRepository.setDetailPlanImage(planId, date, it.id, fileName, uri)
+                                .addOnSuccessListener {
+                                    Log.e("Image Add", "Success")
+                                }
+                                .addOnFailureListener{
+                                    Log.e("Image Add", "Fail")
+                                }
+                        }
 
                     }
                     .addOnFailureListener {

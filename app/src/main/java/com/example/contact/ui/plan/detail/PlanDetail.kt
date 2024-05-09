@@ -33,7 +33,7 @@ class PlanDetail : AppCompatActivity() {
             binding.plan = it!!
             viewModel.getMemberDisplayName(it.member)
 
-            if(it.date.isNotEmpty()) setTabLayout(it.date)
+            if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)
         }
 
         binding.dateButton.setOnClickListener {
@@ -42,7 +42,6 @@ class PlanDetail : AppCompatActivity() {
     }
 
     private fun setTabLayout(d: ArrayList<out String?>){
-        Log.e("Date", d.toString())
         for(day in d[0]!!.toInt()..d[1]!!.toInt()){
             val year = day.toString().substring(0..3)
             val md = day.toString().substring(4..7)
@@ -51,8 +50,11 @@ class PlanDetail : AppCompatActivity() {
 
         setTabItemMargin(binding.tab, 30)
 
+        val firstY = d[0].toString().substring(0..3)
+        val firstM = d[0].toString().substring(4..7)
+
         val bundle = Bundle().apply {
-            putString("date", d[0])
+            putString("date", "$firstY\n$firstM")
             putString("planId", planId)
         }
         val fragment = TabFragment()

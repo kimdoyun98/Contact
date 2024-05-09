@@ -1,5 +1,6 @@
 package com.example.contact.util.firebase
 
+import androidx.lifecycle.asLiveData
 import com.example.contact.data.plan.Plan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -7,6 +8,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import io.github.horaciocome1.fireflow.asFlow
+import io.github.horaciocome1.fireflow.snapshotAsFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class FirebaseRepository {
@@ -53,4 +55,6 @@ class FirebaseRepository {
     fun getMyPlan(uid: String) =
         fireStore.collection("Plan").whereArrayContains("member", uid)
 
+    fun detailPlanList(planId: String, date: String) = getPlan(planId)
+        .collection(date).snapshotAsFlow().asLiveData()
 }

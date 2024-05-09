@@ -48,7 +48,7 @@ class DetailPlanAddViewModel @Inject constructor(
         suspendCoroutine { continuation ->
             viewModelScope.launch {
                 firebaseRepository.getPlan(planId)
-                    .collection("Detail").document(date).set(
+                    .collection(date).add(
                         DetailPlan(
                             "${time[0]}:${time[1]}",
                             location,

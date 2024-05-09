@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.DetailPlan
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -63,13 +64,22 @@ class DetailPlanAddViewModel @Inject constructor(
                         continuation.resume(true)
                         Toast.makeText(MyApplication.getInstance(), "성공!", Toast.LENGTH_SHORT)
                             .show()
-
+                        /**
+                         * 이미지 저장
+                         */
+                        val dplanId = it.id
                         imgUri.value?.forEach { uri ->
                             val sdf = SimpleDateFormat("yyyyMMddHHmmss")
                             val fileName = "IMG_" + sdf.format(Date()) + ".png"
-                            firebaseRepository.setDetailPlanImage(planId, date, it.id, fileName, uri)
-                                .addOnSuccessListener {
-                                    Log.e("Image Add", "Success")
+                            firebaseRepository.setDetailPlanImage(planId, date, dplanId, fileName, uri)
+                                .addOnSuccessListener { imageTask ->
+                                    imageTask.storage.downloadUrl
+                                        .addOnSuccessListener { test ->
+                                            Log.e("ImgUri", test.toString())
+                                            firebaseRepository.getPlan(planId)
+                                                .collection(date).document(dplanId)
+                                                .update("images", FieldValue.arrayUnion(test))
+                                        }
                                 }
                                 .addOnFailureListener{
                                     Log.e("Image Add", "Fail")

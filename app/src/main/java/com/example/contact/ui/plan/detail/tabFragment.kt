@@ -1,6 +1,5 @@
 package com.example.contact.ui.plan.detail
 
-import android.R.attr.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import com.example.contact.adapter.plan.DetailPlanAdapter
 import com.example.contact.databinding.FragmentTabBinding
@@ -16,7 +14,6 @@ import com.example.contact.ui.plan.detail.add.DetailPlanAdd
 import com.example.contact.ui.plan.detail.info.PlanDetailInfo
 import com.example.contact.util.MyApplication
 import com.google.firebase.firestore.DocumentSnapshot
-import com.gun0912.tedpermission.provider.TedPermissionProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -26,6 +23,8 @@ class TabFragment : Fragment() {
     private lateinit var binding: FragmentTabBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setDate(requireArguments().getString("date")!!)
+        viewModel.planId = requireArguments().getString("planId")!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,16 +43,18 @@ class TabFragment : Fragment() {
         val adapter = DetailPlanAdapter(this)
         binding.detailPlanRecycler.adapter = adapter
 
+
+        /**
+         * Tab 클릭 시 변환
+         */
         viewModel.date.observe(viewLifecycleOwner){ date ->
             Log.e("date", date)
 
             viewModel.getDetailPlan().observe(viewLifecycleOwner){
-                Log.e("getDetailPlan", it.toString())
                 val list = mutableListOf<DocumentSnapshot>()
                 it?.documents?.forEach { document ->
                     list.add(document)
                 }
-                Log.e("getDetailPlan list", list.toString())
                 adapter.setData(list)
             }
         }
@@ -73,8 +74,6 @@ class TabFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTabBinding.inflate(layoutInflater, container, false)
-        viewModel.setDate(requireArguments().getString("date")!!)
-        viewModel.planId = requireArguments().getString("planId")!!
         return binding.root
     }
 

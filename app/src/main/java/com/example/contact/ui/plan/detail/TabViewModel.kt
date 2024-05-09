@@ -15,7 +15,6 @@ class TabViewModel @Inject constructor(
     private var _date = MutableLiveData<String>("")
     val date: LiveData<String> = _date
     var planId = ""
-    //val detailPlanList: LiveData<QuerySnapshot?> = firebaseRepository.detailPlanList(planId, date.value!!)
 
     fun setDate(string: String){
         _date.value = string

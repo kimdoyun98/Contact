@@ -61,6 +61,10 @@ class FirebaseRepository {
     fun detailPlanList(planId: String, date: String) = getPlan(planId)
         .collection(date).snapshotAsFlow().asLiveData()
 
+    /**
+     * Image
+     */
     fun setDetailPlanImage(planId: String, date: String, dplanId: String, fileName: String, uri: Uri): UploadTask =
         fireStorage.getReference("$planId/$date/$dplanId/$fileName").putFile(uri)
+
 }

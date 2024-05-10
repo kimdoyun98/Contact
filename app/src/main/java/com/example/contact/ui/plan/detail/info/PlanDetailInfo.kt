@@ -15,11 +15,7 @@ class PlanDetailInfo : AppCompatActivity() {
         binding = ActivityPlanDetailInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val uri: String? = intent.getStringExtra("imgUri")
-        Log.e("PlanDetailInfo", uri.toString())
-        Glide.with(this)
-            .load(uri)
-            .centerCrop()
-            .into(binding.image)
+        val detail = intent.getSerializableExtra("detail")
+        Log.e("PlanDetailInfo", detail.toString())
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.contact.adapter.plan.DetailPlanAdapter
+import com.example.contact.data.plan.DetailPlan
 import com.example.contact.databinding.FragmentTabBinding
 import com.example.contact.ui.plan.detail.add.DetailPlanAdd
 import com.example.contact.ui.plan.detail.info.PlanDetailInfo
@@ -60,9 +61,9 @@ class TabFragment : Fragment() {
         }
         
         adapter.setOnClick(object : PlanDetailClick{
-            override fun planDetailClick(uri: String) {
+            override fun planDetailClick(detailPlan: DetailPlan) {
                 val intent = Intent(MyApplication.getInstance(), PlanDetailInfo::class.java)
-                intent.putExtra("imgUri", uri)
+                intent.putExtra("detail", detailPlan)
                 startActivity(intent)
             }
 

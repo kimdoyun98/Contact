@@ -24,7 +24,9 @@ class DetailPlanAdapter (
     }
 
     fun setData(list: MutableList<DocumentSnapshot>){
+        list.sortBy { it.data!!["time"] as String }
         detailPlanList = list
+
         notifyDataSetChanged()
     }
 
@@ -32,23 +34,10 @@ class DetailPlanAdapter (
         v: View,
         private val lifecycleOwner: LifecycleOwner): RecyclerView.ViewHolder(v){
 
-        fun bind(position: Int){
-            val uriList = detailPlanList[position].data!!["images"]!! as ArrayList<String>
-
+        fun bind(detail: DetailPlan){
             binding.lifecycleOwner = this@ViewHolder.lifecycleOwner
-            binding.planDetail = DetailPlan(
-                time = detailPlanList[position].data!!["time"]!!.toString(),
-                location = detailPlanList[position].data!!["location"]!!.toString(),
-                images = uriList
-            )
+            binding.planDetail = detail
 
-            if(uriList.isNotEmpty()){
-                Glide
-                    .with(MyApplication.getInstance())
-                    .load(uriList[0])
-                    .centerCrop()
-                    .into(binding.image)
-            }
         }
     }
 
@@ -61,10 +50,26 @@ class DetailPlanAdapter (
     }
 
     override fun onBindViewHolder(holder: DetailPlanAdapter.ViewHolder, position: Int) {
-        holder.bind(position)
+        val uriList = detailPlanList[position].data!!["images"]!! as ArrayList<String>
+        val detailPlan =
+            DetailPlan(
+                time = detailPlanList[position].data!!["time"]!!.toString(),
+                location = detailPlanList[position].data!!["location"]!!.toString(),
+                address = detailPlanList[position].data!!["address"]?.toString(),
+                images = uriList
+            )
+
+        holder.bind(detailPlan)
+        if(uriList.isNotEmpty()){
+            Glide
+                .with(MyApplication.getInstance())
+                .load(uriList[0])
+                .centerCrop()
+                .into(binding.image)
+        }
+
         binding.layout.setOnClickListener {
-            val imgUri = detailPlanList[position].data!!["imgUri"]!! as ArrayList<String>
-            onClick?.planDetailClick(imgUri[0])
+            onClick?.planDetailClick(detailPlan)
         }
     }
 

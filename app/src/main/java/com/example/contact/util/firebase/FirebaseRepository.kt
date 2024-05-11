@@ -2,6 +2,7 @@ package com.example.contact.util.firebase
 
 import android.net.Uri
 import androidx.lifecycle.asLiveData
+import com.example.contact.data.plan.DetailPlan
 import com.example.contact.data.plan.Plan
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -10,6 +11,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import io.github.horaciocome1.fireflow.asFlow
 import io.github.horaciocome1.fireflow.snapshotAsFlow
 
 class FirebaseRepository {
@@ -60,6 +62,9 @@ class FirebaseRepository {
 
     fun detailPlanList(planId: String, date: String) = getPlan(planId)
         .collection(date).snapshotAsFlow().asLiveData()
+
+    fun getDetailPlan(planId: String, date: String, dplanId: String) =
+        fireStore.collection("Plan").document(planId).collection(date).document(dplanId).asFlow<DetailPlan>().asLiveData()
 
     /**
      * Image

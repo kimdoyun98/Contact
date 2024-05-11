@@ -13,4 +13,5 @@
     <color name="ghostWhite">#F8F8FF</color>
     <color name="light_gray">#F5F5F5</color>
     <color name="tab_color">#FFFBCC</color>
+    <color name="alpha_black">#A3000000</color>
 </resources>

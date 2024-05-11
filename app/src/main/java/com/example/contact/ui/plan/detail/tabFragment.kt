@@ -61,9 +61,12 @@ class TabFragment : Fragment() {
         }
         
         adapter.setOnClick(object : PlanDetailClick{
-            override fun planDetailClick(detailPlan: DetailPlan) {
+            override fun planDetailClick(id: String, detailPlan: DetailPlan) {
                 val intent = Intent(MyApplication.getInstance(), PlanDetailInfo::class.java)
                 intent.putExtra("detail", detailPlan)
+                intent.putExtra("dplanId", id)
+                intent.putExtra("planId", viewModel.planId)
+                intent.putExtra("date", viewModel.date.value)
                 startActivity(intent)
             }
 

@@ -69,7 +69,7 @@ class DetailPlanAdapter (
         }
 
         binding.layout.setOnClickListener {
-            onClick?.planDetailClick(detailPlan)
+            onClick?.planDetailClick(detailPlanList[position].id, detailPlan)
         }
     }
 

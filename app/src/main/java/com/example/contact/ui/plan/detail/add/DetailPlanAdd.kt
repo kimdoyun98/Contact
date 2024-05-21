@@ -57,8 +57,6 @@ class DetailPlanAdd : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) finish()
-
         when(item.itemId){
             android.R.id.home -> finish()
             R.id.menu_check ->{

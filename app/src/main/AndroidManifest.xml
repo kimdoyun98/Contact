@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Contact"
         tools:targetApi="31">
         <activity
+            android:name=".ui.plan.detail.info.InfoUpdate"
+            android:exported="false" />
+        <activity
             android:name=".ui.plan.detail.info.PlanDetailInfo"
             android:exported="false" />
         <activity

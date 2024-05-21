@@ -11,6 +11,7 @@ import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -23,6 +24,7 @@ class PlanDetailInfoViewModel @Inject constructor(
 
     private val _currentPhoto = MutableLiveData<Uri>()
     var currentPhoto: LiveData<Uri> = _currentPhoto
+    var address: String? = null
 
     lateinit var imgList: List<Uri>
 
@@ -62,4 +64,4 @@ data class DocInfo(
     val planId: String,
     val date: String,
     val dplanId:String
-)
+): Serializable

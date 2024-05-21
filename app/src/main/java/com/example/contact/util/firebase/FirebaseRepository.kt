@@ -66,6 +66,10 @@ class FirebaseRepository {
     fun getDetailPlan(planId: String, date: String, dplanId: String) =
         fireStore.collection("Plan").document(planId).collection(date).document(dplanId).asFlow<DetailPlan>().asLiveData()
 
+    fun updateDetailInfo(planId: String, date: String, dplanId: String, data: Map<String, String>) =
+        fireStore.collection("Plan").document(planId).collection(date).document(dplanId)
+            .update(data)
+
     /**
      * Image
      */

@@ -9,8 +9,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -23,12 +25,16 @@ import com.example.contact.R
 import com.example.contact.adapter.plan.DetailPlanInfoAdapter
 import com.example.contact.adapter.plan.ImageViewpagerAdapter
 import com.example.contact.databinding.ActivityPlanDetailInfoBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
 @AndroidEntryPoint
 class PlanDetailInfo : AppCompatActivity() {
     private lateinit var binding: ActivityPlanDetailInfoBinding
     private val viewModel: PlanDetailInfoViewModel by viewModels()
+    private lateinit var doc: DocInfo
+    private lateinit var updateIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +47,16 @@ class PlanDetailInfo : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        val doc = DocInfo(
+        doc = DocInfo(
             planId = intent.getStringExtra("planId")!!,
             date = intent.getStringExtra("date")!!,
             dplanId = intent.getStringExtra("dplanId")!!
         )
         viewModel.setDocInfo(doc)
+
+        updateIntent = Intent(this, InfoUpdate::class.java).apply {
+            putExtra("data", doc)
+        }
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
@@ -60,7 +70,7 @@ class PlanDetailInfo : AppCompatActivity() {
             adapter.setData(list)
             binding.time = detailPlan.time
             binding.location = detailPlan.location
-
+            viewModel.address = detailPlan.address
             viewModel.imgList = list
         }
 
@@ -124,11 +134,24 @@ class PlanDetailInfo : AppCompatActivity() {
         }
         binding.navi.setOnClickListener {
             // kakao Navi
+            Log.e("Address", viewModel.address.toString())
+            if(viewModel.address.isNullOrEmpty()){
+                val snack = Snackbar.make(binding.root, "주소가 없습니다. 추가하시겠습니까?", Snackbar.LENGTH_LONG)
+                snack.setAction("추가") {
+                    startActivity(updateIntent)
+                }
+                snack.show()
+            }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) finish()
+        when(item.itemId){
+            android.R.id.home -> finish()
+            R.id.menu_setting2 ->{
+                startActivity(updateIntent)
+            }
+        }
 
         return super.onOptionsItemSelected(item)
     }
@@ -171,4 +194,9 @@ class PlanDetailInfo : AppCompatActivity() {
                 }
             }
         }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_plan_menu2, menu)
+        return true
+    }
 }

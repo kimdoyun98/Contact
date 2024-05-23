@@ -77,6 +77,10 @@ class FirebaseRepository {
     fun setDutchPay(planId: String, time: String, data: DutchData) =
         fireStore.collection("Plan").document(planId).collection("DotchPay").document(time).set(data)
 
+    fun getDutchPay(planId: String) =
+        fireStore.collection("Plan").document(planId)
+            .collection("DotchPay").snapshotAsFlow().asLiveData()
+
 
     /**
      * Image

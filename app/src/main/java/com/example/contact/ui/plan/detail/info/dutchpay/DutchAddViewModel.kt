@@ -19,9 +19,6 @@ class DutchAddViewModel @Inject constructor(
     private val _checkCurrentFriend = MutableLiveData<ArrayList<String>>(arrayListOf())
     val checkCurrentFriend: LiveData<ArrayList<String>> = _checkCurrentFriend
 
-    private val _displayName = MutableLiveData<ArrayList<String>>(arrayListOf())
-    val displayName: LiveData<ArrayList<String>> = _displayName
-
     private val _autoStatus = MutableLiveData<Boolean>(true)
     val autoStatus: LiveData<Boolean> = _autoStatus
 
@@ -35,18 +32,8 @@ class DutchAddViewModel @Inject constructor(
         _autoStatus.value = status
     }
 
-    fun addDisplayName(member: ArrayList<String>, planId: String){
+    fun setPlanId(planId: String){
         this.planId = planId
-        viewModelScope.launch {
-            member.forEach {
-                firebaseRepository.getUserInfo(it).get()
-                    .addOnSuccessListener { document ->
-                        val list = displayName.value!!
-                        list.add(document.data!!["displayName"]!!.toString())
-                        _displayName.value = list
-                    }
-            }
-        }
     }
 
     fun setOnClick(uid: String){

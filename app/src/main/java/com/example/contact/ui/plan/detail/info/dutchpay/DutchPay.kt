@@ -21,22 +21,46 @@ class DutchPay : AppCompatActivity() {
         binding = ActivityDutchPayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val planId = intent.getStringExtra("planId")
+        val planId = intent.getStringExtra("planId")!!
         val plan = intent.getSerializableExtra("plan") as Plan
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        /**
+         * init
+         */
+        viewModel.addDisplayName(plan.member)
+        viewModel.getDutch(planId).observe(this){
+            viewModel.initDutch()
+            it?.forEach { document ->
+                val list = document.data["member"] as HashMap<String, Int>
+                viewModel.setMemberPay(list)
+            }
+        }
+
+        /**
+         * 추가
+         */
         binding.add.setOnClickListener {
             val dutchIntent = Intent(this, DutchAdd::class.java)
             dutchIntent.putExtra("planId", planId)
-            dutchIntent.putExtra("plan", plan)
+            dutchIntent.putExtra("members", viewModel.displayName.value!!)
             startActivity(dutchIntent)
         }
 
-
+        /**
+         * 멤버 별 지출 금액
+         */
         val adapter = DutchPayAdapter()
         binding.memberDutchpayRecycler.adapter = adapter
+        viewModel.memberPay.observe(this){
+            adapter.setData(it)
+
+            val total = it.values.toList().sum()
+            binding.total.text = total.toString()
+        }
+
 
     }
 

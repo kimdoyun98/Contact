@@ -1,6 +1,7 @@
 package com.example.contact.ui.plan.detail.info.dutchpay
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -27,26 +28,23 @@ class DutchAdd : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        val plan = intent.getSerializableExtra("plan") as Plan
         val planId = intent.getStringExtra("planId")!!
+        val members = intent.getStringArrayListExtra("members")!!
+        Log.e("members", members.toString())
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        lifecycleScope.launch {
-            viewModel.addDisplayName(plan.member, planId)
-        }
+        viewModel.setPlanId(planId)
+
 
         val adapter = DutchAddMemberAdapter(viewModel, this)
-        binding.memberRecycler.adapter = adapter
+        binding.memberRecycler.adapter = adapter.apply {
+            setData(members)
+        }
 
         val notAutoAdapter = ManualDutchAdapter(viewModel, this)
         binding.manualDutch.adapter = notAutoAdapter
-
-        viewModel.displayName.observe(this){
-            adapter.setData(it)
-        }
-
 
         binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {

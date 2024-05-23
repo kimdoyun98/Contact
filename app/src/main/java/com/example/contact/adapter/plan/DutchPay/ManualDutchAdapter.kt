@@ -3,6 +3,7 @@ package com.example.contact.adapter.plan.DutchPay
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.databinding.NotAutoItemBinding
@@ -29,6 +30,10 @@ class ManualDutchAdapter (
             binding.viewModel = viewModel
             binding.lifecycleOwner = lifecycleOwner
             binding.displayName = memberList[position]
+
+            binding.notAutoEdit.addTextChangedListener {
+                viewModel.map[memberList[position]] = it.toString().toInt()
+            }
         }
     }
 

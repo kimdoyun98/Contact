@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.example.contact.data.plan.DetailPlan
 import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.dutch.DutchData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -69,6 +70,13 @@ class FirebaseRepository {
     fun updateDetailInfo(planId: String, date: String, dplanId: String, data: Map<String, String>) =
         fireStore.collection("Plan").document(planId).collection(date).document(dplanId)
             .update(data)
+
+    /**
+     * Plan Dutch Pay
+     */
+    fun setDutchPay(planId: String, time: String, data: DutchData) =
+        fireStore.collection("Plan").document(planId).collection("DotchPay").document(time).set(data)
+
 
     /**
      * Image

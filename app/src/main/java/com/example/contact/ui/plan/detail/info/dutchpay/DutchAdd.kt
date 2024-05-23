@@ -1,13 +1,10 @@
 package com.example.contact.ui.plan.detail.info.dutchpay
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.contact.R
 import com.example.contact.adapter.plan.DutchPay.DutchAddMemberAdapter
@@ -15,7 +12,6 @@ import com.example.contact.adapter.plan.DutchPay.ManualDutchAdapter
 import com.example.contact.data.plan.Plan
 import com.example.contact.databinding.ActivityDutchAddBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,9 +34,7 @@ class DutchAdd : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         lifecycleScope.launch {
-            viewModel.getMemberList(planId).collect {
-                viewModel.addDisplayName(it.member)
-            }
+            viewModel.addDisplayName(plan.member, planId)
         }
 
         val adapter = DutchAddMemberAdapter(viewModel, this)
@@ -67,6 +61,10 @@ class DutchAdd : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.saveStatus.observe(this){
+            if(it) finish()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -75,7 +73,7 @@ class DutchAdd : AppCompatActivity() {
             R.id.menu_check -> {
                 viewModel.save(
                     binding.memo.text.toString(),
-                    binding.autoDutch.text.toString().toInt()
+                    if(viewModel.autoStatus.value!!) binding.autoDutch.text.toString().toInt() else 0
                 )
             }
         }

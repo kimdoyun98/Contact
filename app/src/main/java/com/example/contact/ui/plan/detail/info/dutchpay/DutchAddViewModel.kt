@@ -1,17 +1,15 @@
 package com.example.contact.ui.plan.detail.info.dutchpay
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.contact.data.plan.Plan
-import com.example.contact.data.user.UserInfo
+import com.example.contact.data.plan.dutch.DutchData
 import com.example.contact.util.firebase.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.horaciocome1.fireflow.asFlow
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,11 +25,18 @@ class DutchAddViewModel @Inject constructor(
     private val _autoStatus = MutableLiveData<Boolean>(true)
     val autoStatus: LiveData<Boolean> = _autoStatus
 
+    private lateinit var planId: String
+    val map = HashMap<String, Int>()
+
+    private val _saveStatus = MutableLiveData(false)
+    val saveStatus: LiveData<Boolean> = _saveStatus
+
     fun changeAuto(status: Boolean){
         _autoStatus.value = status
     }
 
-    fun addDisplayName(member: ArrayList<String>){
+    fun addDisplayName(member: ArrayList<String>, planId: String){
+        this.planId = planId
         viewModelScope.launch {
             member.forEach {
                 firebaseRepository.getUserInfo(it).get()
@@ -53,18 +58,30 @@ class DutchAddViewModel @Inject constructor(
         _checkCurrentFriend.value = list
     }
 
-    fun getMemberList(planId: String): Flow<Plan> = firebaseRepository.getPlan(planId).asFlow<Plan>() as Flow<Plan>
-
     fun save(memo: String, total: Int){
-        val map = HashMap<String, Int>()
-        val member = displayName.value!!
-        for(i in member){
-            if(autoStatus.value!!){
+        val member = checkCurrentFriend.value!!
+        if(autoStatus.value!!){
+            for(i in member){
                 map[i] = total/member.size
             }
-            else{
-                
-            }
+        }
+
+        val data = DutchData(
+            memo,
+            map
+        )
+
+        val date = Date(System.currentTimeMillis())
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val time = sdf.format(date)
+        viewModelScope.launch{
+            firebaseRepository.setDutchPay(planId, time, data)
+                .addOnSuccessListener {
+                    _saveStatus.value = true
+                }
+                .addOnFailureListener {
+                    _saveStatus.value = false
+                }
         }
     }
 }

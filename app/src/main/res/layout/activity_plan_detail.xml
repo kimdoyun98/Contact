@@ -42,9 +42,9 @@
                 </LinearLayout>
 
                 <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/detail_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:menu="@menu/detail_plan_menu"
                     app:layout_collapseMode="pin"
                     app:title="@{Plan.title}"/>
 

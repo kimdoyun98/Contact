@@ -1,12 +1,17 @@
 package com.example.contact.ui.plan.detail
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.R
+import com.example.contact.data.plan.Plan
 import com.example.contact.databinding.ActivityPlanDetailBinding
+import com.example.contact.ui.plan.detail.info.dutchpay.DutchPay
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +23,7 @@ class PlanDetail : AppCompatActivity() {
     private lateinit var binding: ActivityPlanDetailBinding
     private val viewModel: PlanDetailViewModel by viewModels()
     private var planId = ""
+    private lateinit var plan: Plan
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlanDetailBinding.inflate(layoutInflater)
@@ -28,11 +34,15 @@ class PlanDetail : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
+        setSupportActionBar(binding.detailToolbar)
+
         viewModel.getPlanData().observe(this){
             binding.plan = it!!
             viewModel.getMemberDisplayName(it.member)
 
             if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)
+
+            plan = it
         }
 
         binding.dateButton.setOnClickListener {
@@ -103,5 +113,24 @@ class PlanDetail : AppCompatActivity() {
                 tabLayout.requestLayout()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_setting -> finish()
+            R.id.menu_money ->{
+                val intent = Intent(this, DutchPay::class.java)
+                intent.putExtra("planId", planId)
+                intent.putExtra("plan", plan)
+                startActivity(intent)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_plan_menu, menu)
+        return true
     }
 }

@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DutchPay : AppCompatActivity() {
     private lateinit var binding: ActivityDutchPayBinding
     private val viewModel: DutchPayViewModel by viewModels()
+    private var total = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class DutchPay : AppCompatActivity() {
             viewModel.initDutch()
             it?.forEach { document ->
                 val list = document.data["member"] as HashMap<String, Int>
-                viewModel.setMemberPay(list)
+                viewModel.setMemberPay(list, document)
             }
         }
 
@@ -50,6 +51,17 @@ class DutchPay : AppCompatActivity() {
         }
 
         /**
+         * 영수증
+         */
+        binding.receipt.setOnClickListener {
+            val receiptIntent = Intent(this, Receipt::class.java).apply {
+                putExtra("dutch_item", viewModel.receipt)
+                putExtra("total", total.toString())
+            }
+            startActivity(receiptIntent)
+        }
+
+        /**
          * 멤버 별 지출 금액
          */
         val adapter = DutchPayAdapter()
@@ -57,7 +69,7 @@ class DutchPay : AppCompatActivity() {
         viewModel.memberPay.observe(this){
             adapter.setData(it)
 
-            val total = it.values.toList().sum()
+            total = it.values.toList().sum()
             binding.total.text = total.toString()
         }
 
@@ -65,9 +77,7 @@ class DutchPay : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.home -> finish()
-        }
+        finish()
 
         return super.onOptionsItemSelected(item)
     }

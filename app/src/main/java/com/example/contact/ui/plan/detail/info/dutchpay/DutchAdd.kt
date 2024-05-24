@@ -67,13 +67,13 @@ class DutchAdd : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.home -> finish()
             R.id.menu_check -> {
                 viewModel.save(
                     binding.memo.text.toString(),
                     if(viewModel.autoStatus.value!!) binding.autoDutch.text.toString().toInt() else 0
                 )
             }
+            else -> finish()
         }
 
         return super.onOptionsItemSelected(item)

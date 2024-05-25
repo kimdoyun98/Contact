@@ -2,7 +2,7 @@ package com.example.contact.data.plan
 
 import java.io.Serializable
 
-data class Plan(
+data class PlanData(
     val title: String = "",
     val member: ArrayList<String> = arrayListOf(),
     val invite: ArrayList<String> = arrayListOf(),

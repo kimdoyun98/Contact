@@ -6,9 +6,6 @@
         <variable
             name="viewmodel"
             type="com.example.contact.ui.plan.detail.PlanDetailViewModel" />
-        <variable
-            name="Plan"
-            type="com.example.contact.data.plan.Plan" />
         <import type="android.view.View"/>
     </data>
 
@@ -46,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:title="@{Plan.title}"/>
+                    app:title="제목 없음"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -54,7 +51,7 @@
                 android:id="@+id/date_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{Plan.date.isEmpty() ? View.VISIBLE : View.GONE}"
+                android:visibility="@{viewmodel.planInfo.date.isEmpty() ? View.VISIBLE : View.GONE}"
                 android:text="날짜를 정해주세요.."/>
 
             <com.google.android.material.tabs.TabLayout
@@ -62,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:visibility="@{Plan.date.isEmpty() ? View.GONE : View.VISIBLE}"
+                android:visibility="@{viewmodel.planInfo.date.isEmpty() ? View.GONE : View.VISIBLE}"
                 app:tabTextAppearance="@style/TabText"
                 app:tabBackground="@drawable/tab_style"
                 app:tabTextColor="@drawable/tab_select"
@@ -76,7 +73,7 @@
             android:id="@+id/fc_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{Plan.date.isEmpty() ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewmodel.planInfo.date.isEmpty() ? View.GONE : View.VISIBLE}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

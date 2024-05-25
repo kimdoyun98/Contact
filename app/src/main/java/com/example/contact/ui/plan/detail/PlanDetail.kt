@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.R
-import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.PlanData
 import com.example.contact.databinding.ActivityPlanDetailBinding
 import com.example.contact.ui.plan.detail.info.dutchpay.DutchPay
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -23,26 +23,26 @@ class PlanDetail : AppCompatActivity() {
     private lateinit var binding: ActivityPlanDetailBinding
     private val viewModel: PlanDetailViewModel by viewModels()
     private var planId = ""
-    private lateinit var plan: Plan
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlanDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         planId = intent.getStringExtra("planId")!!
+
         viewModel.setPlanId(planId)
+        viewModel.setPlan(intent.getSerializableExtra("plan_data") as PlanData)
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
         setSupportActionBar(binding.detailToolbar)
+        binding.detailToolbar.title = viewModel.planInfo?.title
 
         viewModel.getPlanData().observe(this){
-            binding.plan = it!!
-            viewModel.getMemberDisplayName(it.member)
+            viewModel.getMemberDisplayName(it!!.member)
 
+            viewModel.setPlan(it)
             if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)
-
-            plan = it
         }
 
         binding.dateButton.setOnClickListener {
@@ -121,7 +121,7 @@ class PlanDetail : AppCompatActivity() {
             R.id.menu_money ->{
                 val intent = Intent(this, DutchPay::class.java)
                 intent.putExtra("planId", planId)
-                intent.putExtra("plan", plan)
+                intent.putExtra("plan", viewModel.planInfo)
                 startActivity(intent)
             }
         }

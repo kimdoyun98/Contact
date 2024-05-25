@@ -3,7 +3,7 @@ package com.example.contact.util.firebase
 import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.example.contact.data.plan.DetailPlan
-import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.PlanData
 import com.example.contact.data.plan.dutch.DutchData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -49,8 +49,8 @@ class FirebaseRepository {
     /**
      * Plan
      */
-    fun setPlan(plan: Plan): Task<DocumentReference> =
-        fireStore.collection("Plan").add(plan)
+    fun setPlan(planData: PlanData): Task<DocumentReference> =
+        fireStore.collection("Plan").add(planData)
 
     fun getInvitePlan(uid: String) =
         fireStore.collection("Plan").whereArrayContains("invite", uid)

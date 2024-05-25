@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.contact.data.plan.Plan
 import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.InvitePlanItemBinding
 import com.example.contact.ui.home.HomeViewModel

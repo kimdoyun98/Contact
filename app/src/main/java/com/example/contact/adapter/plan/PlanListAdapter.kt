@@ -1,6 +1,5 @@
 package com.example.contact.adapter.plan
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlanListAdapter constructor(
+class PlanListAdapter (
     private val firebaseRepository: FirebaseRepository
 ): RecyclerView.Adapter<PlanListAdapter.ViewHolder>() {
     private lateinit var binding: PlanListItemBinding
@@ -63,7 +62,7 @@ class PlanListAdapter constructor(
         holder.bind(position)
 
         binding.root.setOnClickListener {
-            onClickEvent!!.onPlanClickEvent(planList[position].id)
+            onClickEvent!!.onPlanClickEvent(planList[position])
         }
     }
 }

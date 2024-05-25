@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.contact.R
 import com.example.contact.adapter.plan.DutchPay.DutchPayAdapter
-import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.PlanData
 import com.example.contact.databinding.ActivityDutchPayBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +22,7 @@ class DutchPay : AppCompatActivity() {
         setContentView(binding.root)
 
         val planId = intent.getStringExtra("planId")!!
-        val plan = intent.getSerializableExtra("plan") as Plan
+        val planData = intent.getSerializableExtra("plan") as PlanData
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -31,7 +30,7 @@ class DutchPay : AppCompatActivity() {
         /**
          * init
          */
-        viewModel.addDisplayName(plan.member)
+        viewModel.addDisplayName(planData.member)
         viewModel.getDutch(planId).observe(this){
             viewModel.initDutch()
             it?.forEach { document ->

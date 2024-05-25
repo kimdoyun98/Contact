@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.PlanData
 import com.example.contact.data.user.UserInfo
 import com.example.contact.util.firebase.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,11 +22,17 @@ class PlanDetailViewModel @Inject constructor(
     private val _memberList = MutableLiveData<String>()
     val memberList:LiveData<String> = _memberList
 
+    var planInfo: PlanData? = null
+
     fun setPlanId(planId: String){
         this.planId = planId
     }
 
-    fun getPlanData(): LiveData<Plan?> = firebaseRepository.getPlan(planId!!).asFlow<Plan>().asLiveData()
+    fun setPlan(planData: PlanData){
+        planInfo = planData
+    }
+
+    fun getPlanData(): LiveData<PlanData?> = firebaseRepository.getPlan(planId!!).asFlow<PlanData>().asLiveData()
 
     fun getMemberDisplayName(memberUid: ArrayList<String>){
         val member = StringBuilder()

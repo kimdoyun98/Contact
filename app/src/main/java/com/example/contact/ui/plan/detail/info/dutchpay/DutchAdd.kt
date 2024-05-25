@@ -6,14 +6,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.contact.R
 import com.example.contact.adapter.plan.DutchPay.DutchAddMemberAdapter
 import com.example.contact.adapter.plan.DutchPay.ManualDutchAdapter
-import com.example.contact.data.plan.Plan
 import com.example.contact.databinding.ActivityDutchAddBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DutchAdd : AppCompatActivity() {

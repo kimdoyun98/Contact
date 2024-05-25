@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.BuildConfig
 import com.example.contact.data.fcm.Fcm
-import com.example.contact.data.plan.Plan
+import com.example.contact.data.plan.PlanData
 import com.example.contact.di.FirebaseCloudMessage
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
@@ -83,7 +83,7 @@ class AddPlanViewModel @Inject constructor(
             val t = if(time.isNullOrEmpty()) null else "${time[0]}:${time[1]}"
             val date = if(start == null) arrayListOf<String>() else arrayListOf(start, end)
 
-            val plan = Plan(
+            val planData = PlanData(
                 title,
                 member,
                 friendList.value!!,
@@ -92,7 +92,7 @@ class AddPlanViewModel @Inject constructor(
             )
 
             viewModelScope.launch {
-                firebaseRepository.setPlan(plan)
+                firebaseRepository.setPlan(planData)
                     .addOnSuccessListener {
                         friendList.value!!.forEach {
                             sendInviteMessage(it)

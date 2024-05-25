@@ -3,17 +3,15 @@ package com.example.contact.ui.plan
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.contact.R
-import com.example.contact.adapter.home.InvitePlanAdapter
 import com.example.contact.adapter.plan.PlanListAdapter
+import com.example.contact.data.plan.PlanData
 import com.example.contact.data.plan.PlanViewModel
 import com.example.contact.databinding.FragmentPlanBinding
-import com.example.contact.ui.home.HomeViewModel
 import com.example.contact.ui.plan.detail.PlanDetail
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
@@ -42,10 +40,19 @@ class Plan : Fragment() {
         }
 
         adapter.setClickEvent(object : PlanClickEvent{
-            override fun onPlanClickEvent(planId: String) {
+            override fun onPlanClickEvent(doc: DocumentSnapshot) {
                 // 일정 상세로 넘어가기
                 val intent = Intent(MyApplication.getInstance(), PlanDetail::class.java)
-                intent.putExtra("planId", planId)
+                intent.putExtra("planId", doc.id)
+                val data = PlanData(
+                    title = doc.data!!["title"] as String,
+                    member = doc.data!!["member"] as ArrayList<String>,
+                    invite = doc.data!!["invite"] as ArrayList<String>,
+                    date = doc.data!!["date"] as ArrayList<String>,
+                    time = doc.data!!["time"] as String?
+                )
+                intent.putExtra("plan_data", data)
+                Log.e("Doc data", data.toString())
                 startActivity(intent)
             }
         })

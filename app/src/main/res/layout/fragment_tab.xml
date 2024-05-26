@@ -36,7 +36,7 @@
                 android:elevation="20dp"
                 android:gravity="center"
                 android:padding="30dp"
-                android:text="+ 일정 추가"
+                android:text="@string/add_plan"
                 android:textSize="30dp"
                 android:textColor="@color/gray"/>
         </LinearLayout>

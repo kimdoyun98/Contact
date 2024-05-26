@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="영수증"/>
+        app:title="@string/receipt"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/receipt_recycler"

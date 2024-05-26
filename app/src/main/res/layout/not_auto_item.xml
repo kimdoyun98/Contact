@@ -32,6 +32,6 @@
             android:background="@drawable/edittext_rectangle"
             android:inputType="number"
             android:paddingStart="10dp"
-            android:hint="0"/>
+            android:hint="@string/init_money"/>
     </LinearLayout>
 </layout>

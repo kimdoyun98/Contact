@@ -21,7 +21,7 @@
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:background="@drawable/light_purple_button_rectangle"
-            android:text="붙여넣기"
+            android:text="@string/paste"
             android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -31,7 +31,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/light_purple_button_rectangle"
-            android:text="갤러리"
+            android:text="@string/gallery"
             android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -39,7 +39,7 @@
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:background="@drawable/light_purple_button_rectangle"
-            android:text="저장"
+            android:text="@string/save"
             android:textStyle="bold"/>
 
     </LinearLayout>

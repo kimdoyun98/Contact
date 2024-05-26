@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="금액 추가"/>
+            app:title="@string/add_dutch"/>
 
 
         <EditText
@@ -29,7 +29,7 @@
             android:layout_margin="20dp"
             android:layout_gravity="center"
             android:background="@drawable/edittext_rectangle"
-            android:hint="memo"
+            android:hint="@string/memo_hint"
             android:padding="10dp"/>
 
         <RadioGroup
@@ -42,13 +42,13 @@
                 android:id="@+id/auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="자동 (N빵)"
+                android:text="@string/auto_pay"
                 android:checked="true"/>
             <RadioButton
                 android:id="@+id/not_auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="수동 (직접 입력)"/>
+                android:text="@string/not_auto_pay"/>
         </RadioGroup>
         <EditText
             android:id="@+id/auto_dutch"
@@ -58,7 +58,7 @@
             android:layout_gravity="center"
             android:inputType="number"
             android:background="@drawable/edittext_rectangle"
-            android:hint="10000"
+            android:hint="@string/money_hint"
             android:padding="10dp"
             android:visibility="@{viewModel.autoStatus ? View.VISIBLE : View.GONE}" />
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="멤버"
+            android:text="@string/member"
             android:textColor="@color/black"/>
 
         <androidx.recyclerview.widget.RecyclerView

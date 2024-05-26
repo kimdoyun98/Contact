@@ -21,14 +21,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="일정 추가" />
+            app:title="@string/add_plan" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="제목"
+            android:text="@string/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:text="친구"
+            android:text="@string/friend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
-            android:text="추가"
+            android:text="@string/add"
             android:textColor="@color/light_purple"
             android:textSize="13dp"
             app:layout_constraintBottom_toTopOf="@+id/friendRecyclerView"
@@ -91,7 +91,7 @@
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:text="등록"
+            android:text="@string/register"
             android:background="@drawable/light_purple_button_rectangle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="날짜"
+            android:text="@string/date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +156,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="미정" />
+                android:text="@string/undefined" />
 
             <CheckBox
                 android:id="@+id/date_checkbox"
@@ -169,7 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="시간"
+            android:text="@string/time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="미정" />
+                android:text="@string/undefined" />
 
             <CheckBox
                 android:id="@+id/time_checkbox"

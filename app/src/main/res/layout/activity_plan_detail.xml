@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:title="제목 없음"/>
+                    app:title="@string/non_title"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="@{viewmodel.planInfo.date.isEmpty() ? View.VISIBLE : View.GONE}"
-                android:text="날짜를 정해주세요.."/>
+                android:text="@string/need_date"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab"

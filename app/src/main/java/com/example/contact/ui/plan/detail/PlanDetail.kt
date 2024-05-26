@@ -27,8 +27,11 @@ class PlanDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlanDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        planId = intent.getStringExtra("planId")!!
 
+        /**
+         * init
+         */
+        planId = intent.getStringExtra("planId")!!
         viewModel.setPlanId(planId)
         viewModel.setPlan(intent.getSerializableExtra("plan_data") as PlanData)
 
@@ -36,8 +39,11 @@ class PlanDetail : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         setSupportActionBar(binding.detailToolbar)
-        binding.detailToolbar.title = viewModel.planInfo?.title
+        binding.detailToolbar.title = viewModel.getPlan()?.title
 
+        /**
+         * Plan Data
+         */
         viewModel.getPlanData().observe(this){
             viewModel.getMemberDisplayName(it!!.member)
 
@@ -45,46 +51,17 @@ class PlanDetail : AppCompatActivity() {
             if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)
         }
 
+        /**
+         * 일정이 없다면 일정 등록
+         */
         binding.dateButton.setOnClickListener {
             setDate()
         }
     }
 
-    private fun setTabLayout(d: ArrayList<out String?>){
-        for(day in d[0]!!.toInt()..d[1]!!.toInt()){
-            val year = day.toString().substring(0..3)
-            val md = day.toString().substring(4..7)
-            binding.tab.addTab(binding.tab.newTab().setText("$year\n$md"))
-        }
-
-        setTabItemMargin(binding.tab, 30)
-
-        val bundle = Bundle().apply {
-            putString("date", d[0])
-            putString("planId", planId)
-        }
-        val fragment = TabFragment()
-        fragment.arguments = bundle
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.fc_view, fragment)
-        transaction.commit()
-
-        binding.tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val text = tab!!.text.toString().split("\n")
-                fragment.setTabChange("${text[0]}${text[1]}")
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-        })
-    }
-
+    /**
+     * 일정이 없을 경우
+     */
     private fun setDate(){
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("기간을 선택해 주세요.")
@@ -100,6 +77,50 @@ class PlanDetail : AppCompatActivity() {
             viewModel.setDate(start, end)
 
         }
+    }
+
+
+    /**
+     * Tab init
+     */
+    private fun setTabLayout(d: ArrayList<out String?>){
+        for(day in d[0]!!.toInt()..d[1]!!.toInt()){
+            val md = day.toString().substring(4..7)
+            val tabName = StringBuilder(md).apply {
+                insert(2, "월 ")
+                append("일")
+            }.toString()
+
+            binding.tab.addTab(binding.tab.newTab().setText(tabName))
+            viewModel.setDateMap(tabName, "$day")
+        }
+
+        setTabItemMargin(binding.tab, 30)
+
+        val bundle = Bundle().apply {
+            putString("date", d[0])
+        }
+        val fragment = TabFragment()
+        fragment.arguments = bundle
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.fc_view, fragment)
+        transaction.commit()
+
+        // Tab Click
+        binding.tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val text = tab!!.text.toString()
+                fragment.setTabChange(viewModel.getDateMapValue(text))
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
     }
 
     private fun setTabItemMargin(tabLayout: TabLayout, marginEnd: Int = 20) {
@@ -121,7 +142,7 @@ class PlanDetail : AppCompatActivity() {
             R.id.menu_money ->{
                 val intent = Intent(this, DutchPay::class.java)
                 intent.putExtra("planId", planId)
-                intent.putExtra("plan", viewModel.planInfo)
+                intent.putExtra("plan", viewModel.getPlan())
                 startActivity(intent)
             }
         }

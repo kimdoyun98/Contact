@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.PlanData
 import com.example.contact.data.user.UserInfo
 import com.example.contact.util.firebase.FirebaseRepository
+import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.launch
@@ -22,15 +23,26 @@ class PlanDetailViewModel @Inject constructor(
     private val _memberList = MutableLiveData<String>()
     val memberList:LiveData<String> = _memberList
 
-    var planInfo: PlanData? = null
+    private val dateMap = HashMap<String, String>()
+    private var planInfo: PlanData? = null
 
     fun setPlanId(planId: String){
         this.planId = planId
     }
 
+    fun getPlanId(): String? = planId
+
     fun setPlan(planData: PlanData){
         planInfo = planData
     }
+
+    fun getPlan() = planInfo
+
+    fun setDateMap(tabName: String, day: String){
+        dateMap.getOrPut(tabName){ day }
+    }
+
+    fun getDateMapValue(key: String) = dateMap[key]!!
 
     fun getPlanData(): LiveData<PlanData?> = firebaseRepository.getPlan(planId!!).asFlow<PlanData>().asLiveData()
 
@@ -53,4 +65,17 @@ class PlanDetailViewModel @Inject constructor(
             firebaseRepository.getPlan(planId!!).update("date", arrayListOf(start, end))
         }
     }
+
+    /**
+     * Fragment Func
+     */
+    private var _date = MutableLiveData("")
+    val date: LiveData<String> = _date
+
+    fun setDate(string: String){
+        _date.value = string
+    }
+
+    fun getDetailPlan(): LiveData<QuerySnapshot?> = firebaseRepository.detailPlanList(planId!!, date.value!!)
+
 }

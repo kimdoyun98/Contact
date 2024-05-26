@@ -2,7 +2,6 @@ package com.example.contact.ui.plan
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +30,9 @@ class Plan : Fragment() {
         val adapter = PlanListAdapter(firebaseRepository)
         binding.planRecycler.adapter = adapter
 
+        /**
+         * My Plan List
+         */
         viewModel.myPlanList.observe(viewLifecycleOwner){
             val list = mutableListOf<DocumentSnapshot>()
             it?.documents?.forEach { document ->
@@ -39,6 +41,9 @@ class Plan : Fragment() {
             adapter.setPlanList(list)
         }
 
+        /**
+         * Click on Item of List
+         */
         adapter.setClickEvent(object : PlanClickEvent{
             override fun onPlanClickEvent(doc: DocumentSnapshot) {
                 // 일정 상세로 넘어가기
@@ -52,7 +57,6 @@ class Plan : Fragment() {
                     time = doc.data!!["time"] as String?
                 )
                 intent.putExtra("plan_data", data)
-                Log.e("Doc data", data.toString())
                 startActivity(intent)
             }
         })

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.contact.adapter.plan.DetailPlanAdapter
 import com.example.contact.data.plan.DetailPlan
 import com.example.contact.databinding.FragmentTabBinding
@@ -20,24 +20,23 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TabFragment : Fragment() {
-    private val viewModel: TabViewModel by viewModels()
+    private val viewModel: PlanDetailViewModel by activityViewModels()
     private lateinit var binding: FragmentTabBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setDate(requireArguments().getString("date")!!)
-        viewModel.planId = requireArguments().getString("planId")!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
+        /**
+         * 일정 추가
+         */
         binding.addButton.setOnClickListener {
             val intent = Intent(MyApplication.getInstance(), DetailPlanAdd::class.java)
             intent.putExtra("date", viewModel.date.value)
-            intent.putExtra("planId", viewModel.planId)
+            intent.putExtra("planId", viewModel.getPlanId())
             startActivity(intent)
         }
 
@@ -59,17 +58,19 @@ class TabFragment : Fragment() {
                 adapter.setData(list)
             }
         }
-        
+
+        /**
+         * 일정 클릭
+         */
         adapter.setOnClick(object : PlanDetailClick{
             override fun planDetailClick(id: String, detailPlan: DetailPlan) {
                 val intent = Intent(MyApplication.getInstance(), PlanDetailInfo::class.java)
                 intent.putExtra("detail", detailPlan)
                 intent.putExtra("dplanId", id)
-                intent.putExtra("planId", viewModel.planId)
+                intent.putExtra("planId", viewModel.getPlanId())
                 intent.putExtra("date", viewModel.date.value)
                 startActivity(intent)
             }
-
         })
     }
 

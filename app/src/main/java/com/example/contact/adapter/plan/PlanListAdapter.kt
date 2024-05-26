@@ -1,5 +1,6 @@
 package com.example.contact.adapter.plan
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,8 @@ import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class PlanListAdapter (
     private val firebaseRepository: FirebaseRepository
@@ -38,6 +41,25 @@ class PlanListAdapter (
                     }
                 }
             }
+
+            val date = planList[position].data!!["date"] as ArrayList<String>
+            date.takeIf { it.isNotEmpty() }.apply {
+                val startDate = this?.get(0)?.let { StringBuilder(it) }
+                startDate?.insert(4, "년 ")
+                startDate?.insert(8, "월 ")
+                startDate?.append("일")
+                val daysGap = this?.mapIndexed { index, s ->
+                    if(index == 0){
+                        s.toInt() * -1 + 1
+                    }
+                    else s.toInt()
+                }?.toList()?.sum()
+
+                startDate?.append(" (${daysGap}일)")
+
+                binding.date.text = startDate?.toString()?:"미정"
+            }
+
 
         }
     }

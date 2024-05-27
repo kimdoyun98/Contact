@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Contact"
         tools:targetApi="31">
         <activity
+            android:name=".ui.plan.detail.settings.DetailPlanSettings"
+            android:exported="false" />
+        <activity
             android:name=".ui.plan.detail.info.dutchpay.Receipt"
             android:exported="false" />
         <activity

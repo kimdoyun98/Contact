@@ -2,6 +2,7 @@ package com.example.contact.ui.plan.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -11,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.R
 import com.example.contact.data.plan.PlanData
 import com.example.contact.databinding.ActivityPlanDetailBinding
+import com.example.contact.databinding.DetailPlanSettingsBsBinding
 import com.example.contact.ui.plan.detail.info.dutchpay.DutchPay
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +25,7 @@ import java.util.Calendar
 class PlanDetail : AppCompatActivity() {
     private lateinit var binding: ActivityPlanDetailBinding
     private val viewModel: PlanDetailViewModel by viewModels()
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private var planId = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +142,13 @@ class PlanDetail : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.menu_setting -> finish()
+            R.id.menu_setting -> {
+                bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetTheme)
+                val bsBinding = DetailPlanSettingsBsBinding.inflate(LayoutInflater.from(this))
+                initSettings(bsBinding)
+                bottomSheetDialog.setContentView(bsBinding.root)
+                bottomSheetDialog.show()
+            }
             R.id.menu_money ->{
                 val intent = Intent(this, DutchPay::class.java)
                 intent.putExtra("planId", planId)
@@ -153,5 +163,27 @@ class PlanDetail : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.detail_plan_menu, menu)
         return true
+    }
+
+    private fun initSettings(bsBinding: DetailPlanSettingsBsBinding){
+        bsBinding.updateTitle.setOnClickListener {
+
+            bottomSheetDialog.dismiss()
+        }
+
+        bsBinding.inviteMember.setOnClickListener {
+
+            bottomSheetDialog.dismiss()
+        }
+
+        bsBinding.managePlan.setOnClickListener {
+
+            bottomSheetDialog.dismiss()
+        }
+
+        bsBinding.checkout.setOnClickListener {
+
+            bottomSheetDialog.dismiss()
+        }
     }
 }

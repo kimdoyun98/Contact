@@ -59,5 +59,10 @@
     <string name="gallery">갤러리</string>
     <string name="save">저장</string>
     <string name="request_friend_sentence">님의 친구 요청</string>
+    <string name="plan_setting">일정 설정</string>
+    <string name="update_title">제목 수정</string>
+    <string name="invite_member">멤버 초대</string>
+    <string name="manage_plan">일정 관리</string>
+    <string name="checkout">퇴장</string>
 
 </resources>

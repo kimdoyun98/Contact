@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottomsheet_bg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/bs_top_icon"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center|top"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/update_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/update_title"
+        android:textStyle="bold"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/invite_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/invite_member"
+        android:textStyle="bold"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/manage_plan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/manage_plan"
+        android:textStyle="bold"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/checkout"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"/>
+
+</LinearLayout>

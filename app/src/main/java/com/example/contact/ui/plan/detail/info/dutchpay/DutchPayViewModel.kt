@@ -3,13 +3,10 @@ package com.example.contact.ui.plan.detail.info.dutchpay
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.dutch.ReceiptData
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,17 +21,9 @@ class DutchPayViewModel @Inject constructor(
 
     val receipt = ArrayList<ReceiptData>()
 
-    fun addDisplayName(member: ArrayList<String>){
-        viewModelScope.launch {
-            member.forEach {
-                firebaseRepository.getUserInfo(it).get()
-                    .addOnSuccessListener { document ->
-                        val list = displayName.value!!
-                        list.add(document.data!!["displayName"]!!.toString())
-                        _displayName.value = list
-                    }
-            }
-        }
+    fun setDisplayName(member: ArrayList<String>){
+        _displayName.value = member
+
     }
     fun initDutch(){
         val map = HashMap<String, Int>()

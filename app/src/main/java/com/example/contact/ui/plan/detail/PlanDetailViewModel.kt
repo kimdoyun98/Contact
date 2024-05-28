@@ -1,13 +1,11 @@
 package com.example.contact.ui.plan.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.PlanData
-import com.example.contact.data.user.UserInfo
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,17 +44,9 @@ class PlanDetailViewModel @Inject constructor(
 
     fun getPlanData(): LiveData<PlanData?> = firebaseRepository.getPlan(planId!!).asFlow<PlanData>().asLiveData()
 
-    fun getMemberDisplayName(memberUid: ArrayList<String>){
-        val member = StringBuilder()
-        memberUid.forEach { uid ->
-            viewModelScope.launch {
-                firebaseRepository.getUserInfo(uid).asFlow<UserInfo>().collect{
-                    val displayName = it!!.displayName.toString()
-                    member.append("$displayName ")
-                    _memberList.value = member.toString()
-                }
-            }
-        }
+    fun getMemberDisplayName(displayNames: ArrayList<String>){
+        val names = displayNames.toString()
+        _memberList.value = names.substring(1, names.length-1)
     }
 
     /**

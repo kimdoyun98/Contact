@@ -34,12 +34,17 @@ class DutchAdd : AppCompatActivity() {
 
         viewModel.setPlanId(planId)
 
-
+        /**
+         * Plan Member List
+         */
         val adapter = DutchAddMemberAdapter(viewModel, this)
         binding.memberRecycler.adapter = adapter.apply {
             setData(members)
         }
 
+        /**
+         * 수동 & 자동
+         */
         val notAutoAdapter = ManualDutchAdapter(viewModel, this)
         binding.manualDutch.adapter = notAutoAdapter
 

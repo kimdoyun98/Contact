@@ -1,5 +1,6 @@
 package com.example.contact.ui.home.add_plan
 
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -82,10 +83,12 @@ class AddPlanViewModel @Inject constructor(
 
             val t = if(time.isNullOrEmpty()) null else "${time[0]}:${time[1]}"
             val date = if(start == null) arrayListOf<String>() else arrayListOf(start, end)
+            val displayName = firebaseRepository.fireAuth.currentUser?.displayName!!
 
             val planData = PlanData(
                 title,
                 member,
+                arrayListOf(displayName),
                 friendList.value!!,
                 date,
                 t

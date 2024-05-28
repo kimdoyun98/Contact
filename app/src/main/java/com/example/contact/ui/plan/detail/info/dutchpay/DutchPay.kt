@@ -30,7 +30,7 @@ class DutchPay : AppCompatActivity() {
         /**
          * init
          */
-        viewModel.addDisplayName(planData.member)
+        viewModel.setDisplayName(planData.displayNames)
         viewModel.getDutch(planId).observe(this){
             viewModel.initDutch()
             it?.forEach { document ->

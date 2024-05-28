@@ -52,6 +52,7 @@ class Plan : Fragment() {
                 val data = PlanData(
                     title = doc.data!!["title"] as String,
                     member = doc.data!!["member"] as ArrayList<String>,
+                    displayNames = doc.data!!["displayNames"] as ArrayList<String>,
                     invite = doc.data!!["invite"] as ArrayList<String>,
                     date = doc.data!!["date"] as ArrayList<String>,
                     time = doc.data!!["time"] as String?

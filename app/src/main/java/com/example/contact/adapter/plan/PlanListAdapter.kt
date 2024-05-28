@@ -1,21 +1,13 @@
 package com.example.contact.adapter.plan
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.PlanListItemBinding
 import com.example.contact.ui.plan.PlanClickEvent
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.DocumentSnapshot
-import io.github.horaciocome1.fireflow.asFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class PlanListAdapter (
     private val firebaseRepository: FirebaseRepository
@@ -28,19 +20,9 @@ class PlanListAdapter (
         fun bind(position: Int){
             binding.title.text = planList[position].data!!["title"].toString()
 
-            val memberUidList = planList[position].data!!["member"] as ArrayList<String>
-
-            val member = StringBuilder()
-            memberUidList.forEach { uid ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    firebaseRepository.getUserInfo(uid).asFlow<UserInfo>().collect{
-                        val displayName = it!!.displayName.toString()
-                        member.append("$displayName ")
-
-                        binding.member.text = member.toString()
-                    }
-                }
-            }
+            val memberList = planList[position].data!!["displayNames"] as ArrayList<String>
+            val member = memberList.toString()
+            binding.member.text = member.substring(1, member.length-1)
 
             val date = planList[position].data!!["date"] as ArrayList<String>
             date.takeIf { it.isNotEmpty() }.apply {

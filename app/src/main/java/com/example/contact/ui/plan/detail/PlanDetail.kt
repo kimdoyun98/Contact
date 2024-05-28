@@ -2,7 +2,6 @@ package com.example.contact.ui.plan.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -12,7 +11,6 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.contact.R
 import com.example.contact.data.plan.PlanData
 import com.example.contact.databinding.ActivityPlanDetailBinding
@@ -23,9 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -50,14 +45,14 @@ class PlanDetail : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        //setSupportActionBar(binding.detailToolbar)
+        setSupportActionBar(binding.detailToolbar)
         supportActionBar?.title = viewModel.getPlan()?.title
 
         /**
          * Plan Data
          */
         viewModel.getPlanData().observe(this){
-            viewModel.getMemberDisplayName(it!!.member)
+            viewModel.getMemberDisplayName(it!!.displayNames)
 
             viewModel.setPlan(it)
             if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)

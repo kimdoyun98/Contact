@@ -1,8 +1,10 @@
 package com.example.contact.ui.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.contact.util.firebase.FirebaseRepository
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.snapshotAsFlow
 import javax.inject.Inject
@@ -27,9 +29,12 @@ class HomeViewModel @Inject constructor(
                 firebaseRepository.getPlan(planId).update("invite", list)
 
                 if(accept){
-                    val memberList = it.data!!["member"] as ArrayList<String>
-                    memberList.add(myUid)
-                    firebaseRepository.getPlan(planId).update("member", memberList)
+                    firebaseRepository.getPlan(planId).update(
+                        mapOf(
+                            "member" to FieldValue.arrayUnion(myUid),
+                            "displayNames" to FieldValue.arrayUnion(firebaseRepository.fireAuth.currentUser?.displayName!!)
+                        )
+                    )
                 }
             }
     }

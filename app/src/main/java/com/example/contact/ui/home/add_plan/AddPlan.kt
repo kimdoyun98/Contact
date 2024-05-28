@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -92,7 +93,14 @@ class AddPlan : AppCompatActivity() {
                 val arr = arrayOf(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE))
                 time = arr.map { "%02d".format(it) }
             }
-            viewModel.registerButton(
+
+            if(startDate.isNullOrEmpty() && !binding.dateCheckbox.isChecked) {
+                Toast.makeText(this, "날짜를 정해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else if(title.isEmpty()){
+                Toast.makeText(this, "제목을 입력해주세요..", Toast.LENGTH_SHORT).show()
+            }
+            else viewModel.registerButton(
                 title,
                 startDate,
                 endDate,

@@ -133,7 +133,7 @@ class KakaoAuthViewModel @Inject constructor(
     }
 
     fun addFirebaseDB(){
-        val myInfo = firebaseRepository.getMyInfo
+        val myInfo = firebaseRepository.fireAuth.currentUser!!
 
         val user = UserInfo(
             myInfo.uid,

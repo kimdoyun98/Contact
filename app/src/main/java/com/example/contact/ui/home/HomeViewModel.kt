@@ -11,7 +11,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ): ViewModel() {
-    private val myUid = firebaseRepository.getMyInfo.uid
+    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     val inviteList = firebaseRepository.getInvitePlan(myUid).snapshotAsFlow().asLiveData()
 
 

@@ -17,7 +17,7 @@ import javax.inject.Inject
 class AddFriendToPlanViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ): ViewModel() {
-    private val myUid = firebaseRepository.getMyInfo.uid
+    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     val friendList = firebaseRepository.getUserFriend(myUid).document("friend")
         .asFlow<Friend>().asLiveData()
 

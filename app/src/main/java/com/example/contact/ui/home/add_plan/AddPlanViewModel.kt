@@ -78,7 +78,7 @@ class AddPlanViewModel @Inject constructor(
     }
     private suspend fun registerFirebaseDB(title: String, start: String?, end: String?, time: List<String>?): Boolean =
         suspendCoroutine { continuation ->
-            val member = arrayListOf(firebaseRepository.getMyInfo.uid)
+            val member = arrayListOf(firebaseRepository.fireAuth.currentUser?.uid!!)
 
             val t = if(time.isNullOrEmpty()) null else "${time[0]}:${time[1]}"
             val date = if(start == null) arrayListOf<String>() else arrayListOf(start, end)
@@ -124,7 +124,7 @@ class AddPlanViewModel @Inject constructor(
                                 token,
                                 Fcm.FcmMessage(
                                     "초대장",
-                                    "${firebaseRepository.getMyInfo.displayName}님이 모임에 초대하였습니다."
+                                    "${firebaseRepository.fireAuth.currentUser?.displayName}님이 모임에 초대하였습니다."
                                 )
                             ),
                             BuildConfig.FirebaseCloudMessaging

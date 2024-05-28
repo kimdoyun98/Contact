@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -20,7 +21,6 @@ class FirebaseRepository {
     private val fireStorage = FirebaseStorage.getInstance()
 
     val fireAuth = FirebaseAuth.getInstance()
-    val getMyInfo = fireAuth.currentUser!!
 
     companion object {
         private var instance: FirebaseRepository? = null
@@ -57,6 +57,14 @@ class FirebaseRepository {
 
     fun getPlan(planId: String) =
         fireStore.collection("Plan").document(planId)
+
+    fun checkOutPlan(planId: String, uid: String) =
+        fireStore.collection("Plan").document(planId)
+            .update("member", FieldValue.arrayRemove(uid))
+
+    fun updateTitle(planId: String, title: String) =
+        fireStore.collection("Plan").document(planId)
+            .update("title", title)
 
     fun getMyPlan(uid: String) =
         fireStore.collection("Plan").whereArrayContains("member", uid)

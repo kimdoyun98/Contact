@@ -53,18 +53,33 @@ class PlanDetailViewModel @Inject constructor(
                 firebaseRepository.getUserInfo(uid).asFlow<UserInfo>().collect{
                     val displayName = it!!.displayName.toString()
                     member.append("$displayName ")
-                    Log.e("viewModel member1", member.toString())
                     _memberList.value = member.toString()
                 }
             }
         }
     }
 
+    /**
+     * 일정 없을 때 등록
+     */
     fun setDate(start: String, end: String){
         viewModelScope.launch {
             firebaseRepository.getPlan(planId!!).update("date", arrayListOf(start, end))
         }
     }
+
+    /**
+     * 퇴장
+     */
+    fun checkOut() =
+        firebaseRepository.checkOutPlan(planId!!, firebaseRepository.fireAuth.currentUser?.uid!!)
+
+    /**
+     * Title 변경
+     */
+    fun updateTitle(title: String) =
+        firebaseRepository.updateTitle(planId!!, title)
+
 
     /**
      * Fragment Func

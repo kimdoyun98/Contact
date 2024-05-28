@@ -31,9 +31,11 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         val user = firebaseRepository.fireAuth.currentUser
 
         // 서버로 토큰 저장
-        firebaseRepository.getUserInfo(user!!.uid)
-            .collection("CloudMessaging").document("Token")
-            .set("token" to token)
+        if(user?.uid != null){
+            firebaseRepository.getUserInfo(user.uid)
+                .collection("CloudMessaging").document("Token")
+                .set("token" to token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

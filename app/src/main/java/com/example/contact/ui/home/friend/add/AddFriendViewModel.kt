@@ -29,7 +29,7 @@ class AddFriendViewModel @Inject constructor(
     @FirebaseCloudMessage private val retrofitUrl: RetrofitUrl
 ): ViewModel() {
     // 나의 Document
-    private val myUid = firebaseRepository.getMyInfo.uid
+    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     private var userUid = ""
     private val myFriendReq = firebaseRepository.getUserFriend(myUid).document("request")
 

@@ -17,7 +17,7 @@ import javax.inject.Inject
 class FMViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ): ViewModel() {
-    private val myUid = firebaseRepository.getMyInfo.uid
+    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     private val myFriend = firebaseRepository.getUserFriend(myUid)
 
     private val _reqFriend = MutableLiveData<MutableList<String>>()

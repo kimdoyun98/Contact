@@ -2,22 +2,30 @@ package com.example.contact.ui.plan.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.contact.R
 import com.example.contact.data.plan.PlanData
 import com.example.contact.databinding.ActivityPlanDetailBinding
 import com.example.contact.databinding.DetailPlanSettingsBsBinding
+import com.example.contact.ui.home.add_plan.AddFriendToPlan
 import com.example.contact.ui.plan.detail.info.dutchpay.DutchPay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -42,8 +50,8 @@ class PlanDetail : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        setSupportActionBar(binding.detailToolbar)
-        binding.detailToolbar.title = viewModel.getPlan()?.title
+        //setSupportActionBar(binding.detailToolbar)
+        supportActionBar?.title = viewModel.getPlan()?.title
 
         /**
          * Plan Data
@@ -53,6 +61,7 @@ class PlanDetail : AppCompatActivity() {
 
             viewModel.setPlan(it)
             if(it.date.isNotEmpty() && binding.tab.tabCount == 0) setTabLayout(it.date)
+            supportActionBar!!.title = it.title
         }
 
         /**
@@ -166,24 +175,55 @@ class PlanDetail : AppCompatActivity() {
     }
 
     private fun initSettings(bsBinding: DetailPlanSettingsBsBinding){
+        // 제목 수정
+        val edit = EditText(this)
         bsBinding.updateTitle.setOnClickListener {
-
+            AlertDialog.Builder(this)
+                .setTitle("변경할 제목을 입력해주세요.")
+                .setView(edit)
+                .setPositiveButton("변경") { _, _ ->
+                    val text = edit.text.toString()
+                    viewModel.updateTitle(text)
+                }
+                .setNegativeButton("취소") { _, _ -> }
+                .create()
+                .show()
             bottomSheetDialog.dismiss()
         }
-
+        // 친구 초대
         bsBinding.inviteMember.setOnClickListener {
-
+            val intent = Intent(this, AddFriendToPlan::class.java)
+            startActivityForResult(intent, 1)
             bottomSheetDialog.dismiss()
         }
-
+        // 일정 관리
         bsBinding.managePlan.setOnClickListener {
 
             bottomSheetDialog.dismiss()
         }
-
+        // 퇴장
         bsBinding.checkout.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(viewModel.getPlan()?.title)
+                .setMessage("퇴장하시겠습니까?")
+                .setPositiveButton("퇴장") { _, _ ->
+                    viewModel.checkOut()
+                }
+                .setNegativeButton("취소") { _, _ -> }
+                .create()
+                .show()
 
             bottomSheetDialog.dismiss()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            if(data != null){
+                val list = data.getStringArrayListExtra("friendList")!!
+
+            }
         }
     }
 }

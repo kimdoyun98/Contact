@@ -27,7 +27,7 @@ class Plan : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = PlanListAdapter(firebaseRepository)
+        val adapter = PlanListAdapter()
         binding.planRecycler.adapter = adapter
 
         /**

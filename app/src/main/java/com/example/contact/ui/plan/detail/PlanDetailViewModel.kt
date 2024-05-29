@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.PlanData
 import com.example.contact.util.firebase.FirebaseRepository
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
@@ -70,6 +71,17 @@ class PlanDetailViewModel @Inject constructor(
     fun updateTitle(title: String) =
         firebaseRepository.updateTitle(planId!!, title)
 
+    /**
+     * Member Invite
+     */
+    fun inviteMember(members: ArrayList<String>){
+        val setInviteMembers = members.toSet()
+        val setMembers = planInfo?.member!!.toSet()
+        val invite = setInviteMembers.subtract(setMembers)
+
+        firebaseRepository.getPlan(planId!!)
+            .update("invite", FieldValue.arrayUnion(invite))
+    }
 
     /**
      * Fragment Func
@@ -83,4 +95,6 @@ class PlanDetailViewModel @Inject constructor(
 
     fun getDetailPlan(): LiveData<QuerySnapshot?> = firebaseRepository.detailPlanList(planId!!, date.value!!)
 
+    fun deleteDetailPlan(docId: String) =
+        firebaseRepository.deleteDetailPlan(planId!!, date.value!!, docId)
 }

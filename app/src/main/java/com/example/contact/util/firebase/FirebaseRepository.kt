@@ -69,6 +69,9 @@ class FirebaseRepository {
     fun getMyPlan(uid: String) =
         fireStore.collection("Plan").whereArrayContains("member", uid)
 
+    /**
+     * DetailPlan
+     */
     fun detailPlanList(planId: String, date: String) = getPlan(planId)
         .collection(date).snapshotAsFlow().asLiveData()
 
@@ -78,6 +81,10 @@ class FirebaseRepository {
     fun updateDetailInfo(planId: String, date: String, dplanId: String, data: Map<String, String>) =
         fireStore.collection("Plan").document(planId).collection(date).document(dplanId)
             .update(data)
+
+    fun deleteDetailPlan(planId:String, date: String, docId:String) =
+        fireStore.collection("Plan").document(planId)
+            .collection(date).document(docId).delete()
 
     /**
      * Plan Dutch Pay

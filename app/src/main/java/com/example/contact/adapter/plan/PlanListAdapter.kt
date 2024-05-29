@@ -6,12 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.databinding.PlanListItemBinding
 import com.example.contact.ui.plan.PlanClickEvent
-import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.DocumentSnapshot
 
-class PlanListAdapter (
-    private val firebaseRepository: FirebaseRepository
-): RecyclerView.Adapter<PlanListAdapter.ViewHolder>() {
+class PlanListAdapter: RecyclerView.Adapter<PlanListAdapter.ViewHolder>() {
     private lateinit var binding: PlanListItemBinding
     private var planList = mutableListOf<DocumentSnapshot>()
     private var onClickEvent: PlanClickEvent? = null

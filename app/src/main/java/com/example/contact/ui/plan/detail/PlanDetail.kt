@@ -191,11 +191,6 @@ class PlanDetail : AppCompatActivity() {
             startActivityForResult(intent, 1)
             bottomSheetDialog.dismiss()
         }
-        // 일정 관리
-        bsBinding.managePlan.setOnClickListener {
-
-            bottomSheetDialog.dismiss()
-        }
         // 퇴장
         bsBinding.checkout.setOnClickListener {
             AlertDialog.Builder(this)
@@ -217,7 +212,7 @@ class PlanDetail : AppCompatActivity() {
         if (requestCode == 1 && resultCode == RESULT_OK){
             if(data != null){
                 val list = data.getStringArrayListExtra("friendList")!!
-
+                viewModel.inviteMember(list)
             }
         }
     }

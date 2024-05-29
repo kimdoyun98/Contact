@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.contact.adapter.plan.DetailPlanAdapter
@@ -70,6 +71,17 @@ class TabFragment : Fragment() {
                 intent.putExtra("planId", viewModel.getPlanId())
                 intent.putExtra("date", viewModel.date.value)
                 startActivity(intent)
+            }
+
+            override fun planDetailLongClick(docId: String) {
+                AlertDialog.Builder(requireActivity())
+                    .setTitle("삭제하시겠습니까?")
+                    .setPositiveButton("삭제") { _, _ ->
+                        viewModel.deleteDetailPlan(docId)
+                    }
+                    .setNegativeButton("취소") { _, _ -> }
+                    .create()
+                    .show()
             }
         })
     }

@@ -36,17 +36,6 @@
         android:gravity="center_vertical"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/manage_plan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:text="@string/manage_plan"
-        android:textStyle="bold"
-        android:background="@android:color/transparent"
-        android:gravity="center_vertical"/>
-
-    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/checkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -71,6 +71,11 @@ class DetailPlanAdapter (
         binding.layout.setOnClickListener {
             onClick?.planDetailClick(detailPlanList[position].id, detailPlan)
         }
+
+        binding.layout.setOnLongClickListener {
+            onClick?.planDetailLongClick(detailPlanList[position].id)
+            true
+        }
     }
 
     override fun getItemCount(): Int = detailPlanList.size

@@ -33,7 +33,7 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar_layout"
                 android:background="@color/light_gray"
-                android:visibility="@{homeViewModel.inviteList.size == 0 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{homeViewModel.inviteList.documents.size == 0 ? View.GONE : View.VISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.google.android.material.appbar.CollapsingToolbarLayout

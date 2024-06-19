@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.contact.adapter.plan.PlanListAdapter
 import com.example.contact.data.plan.PlanData
-import com.example.contact.data.plan.PlanViewModel
 import com.example.contact.databinding.FragmentPlanBinding
+import com.example.contact.ui.home.HomeViewModel
 import com.example.contact.ui.plan.detail.PlanDetail
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class Plan : Fragment() {
     private lateinit var binding: FragmentPlanBinding
-    private val viewModel: PlanViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
     @Inject lateinit var firebaseRepository: FirebaseRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

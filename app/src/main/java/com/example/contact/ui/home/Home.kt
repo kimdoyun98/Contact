@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.contact.adapter.home.HomePlanAdapter
 import com.example.contact.databinding.RefactoringFragmentHomeBinding
 import com.example.contact.ui.home.add_plan.AddPlan
 import com.example.contact.ui.home.friend.FriendManagement
@@ -49,7 +50,29 @@ class Home : Fragment() {
             startActivity(Intent(MyApplication.getInstance(), FriendManagement::class.java))
         }
 
+        /**
+         * 나의 일정
+         */
+        val adapter = HomePlanAdapter(viewModel)
+        binding.myPlan.adapter = adapter
 
+        viewModel.myPlanList.observe(viewLifecycleOwner){
+            val list = mutableListOf<Pair<String, String>>()
+            it?.documents?.forEach { document ->
+                val dateList = document.data!!["date"] as ArrayList<String>
+                if(dateList.isNotEmpty() && viewModel.checkLastDay(dateList[0])){
+                    list.add(document.data!!["title"] as String to dateList[0])
+                }
+            }
+            list.sortBy {  data ->
+                data.second
+            }
+
+            if(list.isEmpty()) binding.noPlan.visibility = View.VISIBLE
+            else binding.noPlan.visibility = View.GONE
+
+            adapter.setPlanList(list)
+        }
     }
 
     override fun onCreateView(

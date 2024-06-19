@@ -1,12 +1,15 @@
 package com.example.contact.ui.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.contact.util.firebase.FirebaseRepository
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.snapshotAsFlow
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,7 +18,7 @@ class HomeViewModel @Inject constructor(
 ): ViewModel() {
     private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     val inviteList = firebaseRepository.getInvitePlan(myUid).snapshotAsFlow().asLiveData()
-
+    val myPlanList = firebaseRepository.getMyPlan(myUid).snapshotAsFlow().asLiveData()
 
     /**
      * invite plan button
@@ -38,4 +41,20 @@ class HomeViewModel @Inject constructor(
                 }
             }
     }
+
+    private var calendar = Calendar.getInstance()
+    private val selectionFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    fun getDDay(start : String): String {
+        val todayDate = calendar.time.time
+        val startDate = SimpleDateFormat("yyyyMMdd").parse(start).time
+        val today = selectionFormatter.format(LocalDate.now())
+
+        return if (today == start) "D-Day"
+        else {
+            val D_Day = (startDate - todayDate) / (24 * 60 * 60 * 1000) + 1
+            "D-$D_Day"
+        }
+    }
+
+    fun checkLastDay(start: String): Boolean = selectionFormatter.format(LocalDate.now()).toInt() < start.toInt()
 }

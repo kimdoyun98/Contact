@@ -12,4 +12,12 @@ class ChatRepository: FirebaseRepository() {
                 }
             }
     }
+
+    fun registerChat(title: String, member: HashMap<String, String>) =
+        fireStore.collection("Chat").add(
+            mapOf(
+                "title" to title,
+                "member" to member
+            )
+        )
 }

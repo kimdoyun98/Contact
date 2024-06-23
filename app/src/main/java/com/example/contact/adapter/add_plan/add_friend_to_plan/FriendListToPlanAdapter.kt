@@ -5,17 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.AddFriendToPlanItemBinding
-import com.example.contact.ui.home.add_plan.AddFriendToPlanViewModel
-import com.example.contact.util.firebase.FirebaseRepository
-import io.github.horaciocome1.fireflow.asFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.contact.ui.home.add_plan.AddFriendToPlanChatViewModel
 
 class FriendListToPlanAdapter(
-    private val viewModel: AddFriendToPlanViewModel,
+    private val viewModel: AddFriendToPlanChatViewModel,
     private val lifecycleOwner: LifecycleOwner
 ): RecyclerView.Adapter<FriendListToPlanAdapter.ViewHolder>() {
     private lateinit var binding: AddFriendToPlanItemBinding
@@ -28,11 +22,11 @@ class FriendListToPlanAdapter(
 
     inner class ViewHolder(
         v: View,
-        private val addFriendToPlanViewModel: AddFriendToPlanViewModel,
+        private val addFriendToPlanChatViewModel: AddFriendToPlanChatViewModel,
         private val lifecycleOwner: LifecycleOwner): RecyclerView.ViewHolder(v){
 
         fun bind(position: Int){
-            binding.viewModel = addFriendToPlanViewModel
+            binding.viewModel = addFriendToPlanChatViewModel
             binding.lifecycleOwner = this@ViewHolder.lifecycleOwner
 
             binding.currentUid = uidList[position]

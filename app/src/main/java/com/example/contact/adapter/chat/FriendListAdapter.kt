@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.databinding.ChatAddFriendItemBinding
-import com.example.contact.ui.home.add_plan.AddFriendToPlanViewModel
+import com.example.contact.ui.home.add_plan.AddFriendToPlanChatViewModel
 
 class FriendListAdapter(
-    private val viewModel: AddFriendToPlanViewModel,
+    private val viewModel: AddFriendToPlanChatViewModel,
     private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
     private lateinit var binding: ChatAddFriendItemBinding
@@ -17,12 +17,12 @@ class FriendListAdapter(
 
     inner class ViewHolder(
         v: View,
-        private val addFriendToPlanViewModel: AddFriendToPlanViewModel,
+        private val addFriendToPlanChatViewModel: AddFriendToPlanChatViewModel,
         private val lifecycleOwner: LifecycleOwner
     ): RecyclerView.ViewHolder(v){
 
         fun bind(position: Int){
-            binding.viewModel = addFriendToPlanViewModel
+            binding.viewModel = addFriendToPlanChatViewModel
             binding.lifecycleOwner = this@ViewHolder.lifecycleOwner
 
             binding.currentUid = uidList[position]

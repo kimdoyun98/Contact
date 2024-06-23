@@ -18,7 +18,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AddFriendToPlan : AppCompatActivity() {
     private lateinit var binding: ActivityAddFriendToPlanBinding
-    private val viewModel: AddFriendToPlanViewModel by viewModels()
+    private val viewModel: AddFriendToPlanChatViewModel by viewModels()
     @Inject lateinit var userInfoRepository: UserInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {

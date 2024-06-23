@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.dutch.DutchData
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DutchAddViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: PlanRepository
 ): ViewModel() {
     private val _checkCurrentFriend = MutableLiveData<ArrayList<String>>(arrayListOf())
     val checkCurrentFriend: LiveData<ArrayList<String>> = _checkCurrentFriend

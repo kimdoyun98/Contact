@@ -19,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
-    @Inject lateinit var firebaseRepository: FirebaseRepository
+    @Inject lateinit var userInfoRepository: UserInfoRepository
 
     private val CHANNEL_ID = "FCM_ID"
     private val CHANNEL_NAME = "FCM"
@@ -28,11 +28,11 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         Log.e("MyFirebaseMessagingService", "token: $token")
         super.onNewToken(token)
         // 내 uid 구하기
-        val user = firebaseRepository.fireAuth.currentUser
+        val user = userInfoRepository.fireAuth.currentUser
 
         // 서버로 토큰 저장
         if(user?.uid != null){
-            firebaseRepository.getUserInfo(user.uid)
+            userInfoRepository.getUserInfo(user.uid)
                 .collection("CloudMessaging").document("Token")
                 .set("token" to token)
         }

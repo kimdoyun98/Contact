@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.InvitePlanItemBinding
 import com.example.contact.ui.home.HomeViewModel
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.google.firebase.firestore.DocumentSnapshot
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class InvitePlanAdapter(
     private val viewModel: HomeViewModel,
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: UserInfoRepository
 ): RecyclerView.Adapter<InvitePlanAdapter.ViewHolder>() {
     private lateinit var binding: InvitePlanItemBinding
     private var inviteDocumentList = mutableListOf<DocumentSnapshot>()

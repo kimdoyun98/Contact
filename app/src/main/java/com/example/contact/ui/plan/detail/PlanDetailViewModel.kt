@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.plan.PlanData
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanDetailViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: PlanRepository
 ): ViewModel() {
     private var planId: String? = null
     private val _memberList = MutableLiveData<String>()

@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.contact.data.plan.DetailPlan
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class InfoUpdateViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: PlanRepository
 ): ViewModel() {
     private lateinit var docInfo: DocInfo
     private val _status = MutableLiveData(false)

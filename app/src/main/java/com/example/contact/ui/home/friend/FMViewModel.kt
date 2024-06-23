@@ -8,7 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.Friend
 import com.example.contact.data.user.Response
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FMViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val userInfoRepository: UserInfoRepository
 ): ViewModel() {
-    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
-    private val myFriend = firebaseRepository.getUserFriend(myUid)
+    private val myUid = userInfoRepository.fireAuth.currentUser?.uid!!
+    private val myFriend = userInfoRepository.getUserFriend(myUid)
 
     private val _reqFriend = MutableLiveData<MutableList<String>>()
     val reqFriend: LiveData<MutableList<String>> = _reqFriend
@@ -49,14 +49,14 @@ class FMViewModel @Inject constructor(
      * 친구 요청 수락&거절 버튼 클릭 작업
      */
     fun requestButton(uid: String, boolean: Boolean){
-        val userFriend = firebaseRepository.getUserFriend(uid)
+        val userFriend = userInfoRepository.getUserFriend(uid)
         Log.e("MyUid", myUid)
         myFriend.document("response").update("response", FieldValue.arrayRemove(uid))
         userFriend.document("request").update("request", FieldValue.arrayRemove(myUid))
 
         if(boolean){
             //firend Document에 친구 삽입
-            firebaseRepository.getUserInfo(uid).get().addOnSuccessListener {
+            userInfoRepository.getUserInfo(uid).get().addOnSuccessListener {
                 val userDisplayName = it.data!!["displayName"] as String
                 myFriend.document("friend").get().addOnSuccessListener { document ->
                     var map = HashMap<String, String>()
@@ -77,7 +77,7 @@ class FMViewModel @Inject constructor(
                         map = document.data!!["friend"] as HashMap<String, String>
                     }
 
-                    map[myUid] = firebaseRepository.fireAuth.currentUser?.displayName!!
+                    map[myUid] = userInfoRepository.fireAuth.currentUser?.displayName!!
                     userFriend.document("friend").set(hashMapOf("friend" to map))
                 }
         }

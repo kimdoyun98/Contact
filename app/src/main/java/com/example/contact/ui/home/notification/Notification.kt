@@ -1,25 +1,22 @@
 package com.example.contact.ui.home.notification
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import com.example.contact.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.adapter.home.InvitePlanAdapter
 import com.example.contact.databinding.ActivityNotificationBinding
 import com.example.contact.ui.home.HomeViewModel
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.google.firebase.firestore.DocumentSnapshot
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class Notification : AppCompatActivity() {
     private lateinit var binding: ActivityNotificationBinding
     private val viewModel: HomeViewModel by viewModels()
-    @Inject lateinit var firebaseRepository: FirebaseRepository
+    @Inject lateinit var userInfoRepository: UserInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +26,7 @@ class Notification : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val inviteAdapter = InvitePlanAdapter(viewModel, firebaseRepository)
+        val inviteAdapter = InvitePlanAdapter(viewModel, userInfoRepository)
         binding.notificationRecycler.adapter = inviteAdapter
 
         viewModel.inviteList.observe(this){

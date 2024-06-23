@@ -14,6 +14,7 @@ import com.example.contact.ui.home.friend.FriendManagement
 import com.example.contact.ui.home.notification.Notification
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,7 +23,6 @@ class Home : Fragment() {
     private lateinit var binding: RefactoringFragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
-    @Inject lateinit var firebaseRepository: FirebaseRepository
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.homeViewModel = viewModel

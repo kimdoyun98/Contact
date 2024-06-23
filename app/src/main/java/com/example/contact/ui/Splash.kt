@@ -5,13 +5,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.R
 import com.example.contact.ui.sign.Login
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class Splash : AppCompatActivity() {
-    @Inject lateinit var firebaseRepository: FirebaseRepository
+    @Inject lateinit var userInfoRepository: UserInfoRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -23,7 +23,7 @@ class Splash : AppCompatActivity() {
         val loginIntent = Intent(this, Login::class.java)
         val mainIntent = Intent(this, MainActivity::class.java)
 
-        val user = firebaseRepository.fireAuth.currentUser
+        val user = userInfoRepository.fireAuth.currentUser
         if (user != null) startActivity(mainIntent)
         else startActivity(loginIntent)
     }

@@ -1,7 +1,6 @@
 package com.example.contact.ui.home.add_plan
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -11,7 +10,7 @@ import com.example.contact.R
 import com.example.contact.adapter.add_plan.add_friend_to_plan.ChoiceFriendListAdapter
 import com.example.contact.adapter.add_plan.add_friend_to_plan.FriendListToPlanAdapter
 import com.example.contact.databinding.ActivityAddFriendToPlanBinding
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,7 +19,7 @@ import javax.inject.Inject
 class AddFriendToPlan : AppCompatActivity() {
     private lateinit var binding: ActivityAddFriendToPlanBinding
     private val viewModel: AddFriendToPlanViewModel by viewModels()
-    @Inject lateinit var firebaseRepository: FirebaseRepository
+    @Inject lateinit var userInfoRepository: UserInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +54,7 @@ class AddFriendToPlan : AppCompatActivity() {
         /**
          * 선택한 친구 리스트
          */
-        val choiceFriendListAdapter = ChoiceFriendListAdapter(viewModel, firebaseRepository)
+        val choiceFriendListAdapter = ChoiceFriendListAdapter(viewModel, userInfoRepository)
         binding.withFriendRecycler.adapter = choiceFriendListAdapter
 
         viewModel.checkCurrentFriend.observe(this){

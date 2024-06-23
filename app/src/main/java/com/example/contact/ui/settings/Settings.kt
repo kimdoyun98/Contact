@@ -2,19 +2,16 @@ package com.example.contact.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.contact.R
 import com.example.contact.databinding.FragmentSettingsBinding
 import com.example.contact.ui.sign.Login
 import com.example.contact.util.MyApplication
-import com.example.contact.util.firebase.FirebaseRepository
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.example.contact.util.firebase.UserInfoRepository
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -24,14 +21,14 @@ import javax.inject.Inject
 class Settings : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
     @Inject
-    lateinit var firebaseRepository: FirebaseRepository
+    lateinit var userInfoRepository: UserInfoRepository
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
 
 
         binding.logout.setOnClickListener{
-            firebaseRepository.fireAuth.signOut()
+            userInfoRepository.fireAuth.signOut()
             /**
              * kakao
              */

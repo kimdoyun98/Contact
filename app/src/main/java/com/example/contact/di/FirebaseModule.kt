@@ -1,6 +1,9 @@
 package com.example.contact.di
 
+import com.example.contact.util.firebase.ChatRepository
 import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.example.contact.util.retrofit.RetrofitManager.firebaseCloudMessaging
 import com.example.contact.util.retrofit.RetrofitManager.getFirebaseToken
 import com.example.contact.util.retrofit.RetrofitUrl
@@ -26,7 +29,17 @@ object FirebaseModule {
 
     @Singleton
     @Provides
-    fun getFirebaseInstance(): FirebaseRepository = FirebaseRepository.getInstance()
+    fun getUserInfoInstance(): UserInfoRepository = UserInfoRepository.getInstance()
+
+    @Singleton
+    @Provides
+    fun getPlanInstance(): PlanRepository = PlanRepository.getInstance()
+
+    @Singleton
+    @Provides
+    fun getChatInstance(): ChatRepository = ChatRepository.getInstance()
+
+
 }
 
 @Qualifier

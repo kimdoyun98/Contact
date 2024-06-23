@@ -13,7 +13,7 @@ import com.example.contact.data.user.Friend
 import com.example.contact.data.user.Request
 import com.example.contact.data.user.UserInfo
 import com.example.contact.di.FirebaseCloudMessage
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.example.contact.util.retrofit.RetrofitUrl
 import com.google.firebase.firestore.DocumentReference
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddFriendViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository,
+    private val userInfoRepository: UserInfoRepository,
     @FirebaseCloudMessage private val retrofitUrl: RetrofitUrl
 ): ViewModel() {
     // 나의 Document
-    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
+    private val myUid = userInfoRepository.fireAuth.currentUser?.uid!!
     private var userUid = ""
-    private val myFriendReq = firebaseRepository.getUserFriend(myUid).document("request")
+    private val myFriendReq = userInfoRepository.getUserFriend(myUid).document("request")
 
     private val _searchResult = MutableLiveData(false)
     val searchResult: LiveData<Boolean> = _searchResult
@@ -49,7 +49,7 @@ class AddFriendViewModel @Inject constructor(
     val addFriendStatus: LiveData<Boolean> = _addFriendStatus
 
     // 이미 친구
-    val friendStatus: LiveData<Friend?> = firebaseRepository.getUserFriend(myUid).document("friend")
+    val friendStatus: LiveData<Friend?> = userInfoRepository.getUserFriend(myUid).document("friend")
                     .asFlow<Friend>().asLiveData()
 
     // 검색한 친구 Document
@@ -63,7 +63,7 @@ class AddFriendViewModel @Inject constructor(
     fun getFriendSearch(query: String?){
         _loading.value = true
         viewModelScope.launch {
-            firebaseRepository.searchUser(query!!).asFlow<UserInfo>().collect{
+            userInfoRepository.searchUser(query!!).asFlow<UserInfo>().collect{
                 val userInfo = it[0]
                 _searchResult.value = true
                 userUid = userInfo.uid!!
@@ -87,8 +87,8 @@ class AddFriendViewModel @Inject constructor(
      */
     fun addFriend(context: Context){
         // 친구 Document
-        friendUser = firebaseRepository.getUserInfo(userUid)
-        friendRes = firebaseRepository.getUserFriend(userUid).document("response")
+        friendUser = userInfoRepository.getUserInfo(userUid)
+        friendRes = userInfoRepository.getUserFriend(userUid).document("response")
 
         if(addFriendStatus.value!!){
             //친구 요청 취소

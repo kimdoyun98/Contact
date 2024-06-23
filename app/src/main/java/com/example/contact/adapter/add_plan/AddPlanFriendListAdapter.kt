@@ -1,11 +1,11 @@
 package com.example.contact.adapter.add_plan
 
 import com.example.contact.ui.home.add_plan.AddPlanViewModel
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 
 class AddPlanFriendListAdapter(
     private val viewModel: AddPlanViewModel,
-    firebaseRepository: FirebaseRepository
+    firebaseRepository: UserInfoRepository
 ): CurrentFriendListParentAdapter() {
     init {
         this.firebaseRepository = firebaseRepository

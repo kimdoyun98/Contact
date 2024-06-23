@@ -22,7 +22,6 @@ import javax.inject.Inject
 class Plan : Fragment() {
     private lateinit var binding: FragmentPlanBinding
     private val viewModel: HomeViewModel by viewModels()
-    @Inject lateinit var firebaseRepository: FirebaseRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

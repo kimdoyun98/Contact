@@ -2,7 +2,7 @@ package com.example.contact.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.snapshotAsFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: PlanRepository
 ): ViewModel() {
     private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
     val inviteList = firebaseRepository.getInvitePlan(myUid).snapshotAsFlow().asLiveData()

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.ChoiceFriendListItemBinding
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 open class CurrentFriendListParentAdapter: RecyclerView.Adapter<CurrentFriendListParentAdapter.ViewHolder>() {
     lateinit var binding: ChoiceFriendListItemBinding
-    lateinit var firebaseRepository: FirebaseRepository
+    lateinit var firebaseRepository: UserInfoRepository
     var uidList = mutableListOf<String>()
 
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){

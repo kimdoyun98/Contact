@@ -7,7 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.Friend
 import com.example.contact.data.user.UserInfo
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.launch
@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddFriendToPlanViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val userInfoRepository: UserInfoRepository
 ): ViewModel() {
-    private val myUid = firebaseRepository.fireAuth.currentUser?.uid!!
-    val friendList = firebaseRepository.getUserFriend(myUid).document("friend")
+    private val myUid = userInfoRepository.fireAuth.currentUser?.uid!!
+    val friendList = userInfoRepository.getUserFriend(myUid).document("friend")
         .asFlow<Friend>().asLiveData()
 
     private val _checkCurrentFriend = MutableLiveData<ArrayList<String>>(arrayListOf())
@@ -34,7 +34,7 @@ class AddFriendToPlanViewModel @Inject constructor(
 
     fun getFriendSearch(query: String?){
         viewModelScope.launch {
-            firebaseRepository.searchUser(query!!).asFlow<UserInfo>().collect{
+            userInfoRepository.searchUser(query!!).asFlow<UserInfo>().collect{
                 val userInfo = it[0]
                 _searchResult.value = true
                 val userUid = userInfo.uid!!

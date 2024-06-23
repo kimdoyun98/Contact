@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.UserInfo
 import com.example.contact.di.FirebaseToken
 import com.example.contact.util.MyApplication
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.example.contact.util.retrofit.RetrofitUrl
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -30,7 +30,7 @@ import kotlin.coroutines.suspendCoroutine
 @HiltViewModel
 class KakaoAuthViewModel @Inject constructor(
     @FirebaseToken private val retrofit: RetrofitUrl,
-    private val firebaseRepository: FirebaseRepository
+    private val userInfoRepository: UserInfoRepository
 ): ViewModel() {
     private val _logInStatus = MutableStateFlow(false)
     val logInStatus: StateFlow<Boolean> = _logInStatus
@@ -117,7 +117,7 @@ class KakaoAuthViewModel @Inject constructor(
          * Token으로 로그인 처리
          */
 
-        firebaseRepository.fireAuth.signInWithCustomToken(token!!)
+        userInfoRepository.fireAuth.signInWithCustomToken(token!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     /**
@@ -133,7 +133,7 @@ class KakaoAuthViewModel @Inject constructor(
     }
 
     fun addFirebaseDB(){
-        val myInfo = firebaseRepository.fireAuth.currentUser!!
+        val myInfo = userInfoRepository.fireAuth.currentUser!!
 
         val user = UserInfo(
             myInfo.uid,
@@ -142,7 +142,7 @@ class KakaoAuthViewModel @Inject constructor(
             myInfo.displayName
         )
 
-        val userInfo = firebaseRepository.getUserInfo(myInfo.uid)
+        val userInfo = userInfoRepository.getUserInfo(myInfo.uid)
         userInfo.get()
             .addOnSuccessListener { document ->
                 if(document.data == null) {
@@ -161,7 +161,7 @@ class KakaoAuthViewModel @Inject constructor(
             // Get new FCM registration token
             val token = task.result
 
-            firebaseRepository.getUserInfo(myInfo.uid)
+            userInfoRepository.getUserInfo(myInfo.uid)
                 .collection("CloudMessaging").document("Token")
                 .set("token" to token)
         })

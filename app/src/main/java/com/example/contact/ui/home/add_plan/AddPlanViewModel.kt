@@ -12,6 +12,8 @@ import com.example.contact.data.plan.PlanData
 import com.example.contact.di.FirebaseCloudMessage
 import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.PlanRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.example.contact.util.retrofit.RetrofitUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +25,8 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class AddPlanViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository,
+    private val userInfoRepository: UserInfoRepository,
+    private val planRepository: PlanRepository,
     @FirebaseCloudMessage private val retrofitUrl: RetrofitUrl
 ): ViewModel() {
     private val _friendList = MutableLiveData<ArrayList<String>>(arrayListOf())
@@ -79,11 +82,11 @@ class AddPlanViewModel @Inject constructor(
     }
     private suspend fun registerFirebaseDB(title: String, start: String?, end: String?, time: List<String>?): Boolean =
         suspendCoroutine { continuation ->
-            val member = arrayListOf(firebaseRepository.fireAuth.currentUser?.uid!!)
+            val member = arrayListOf(userInfoRepository.fireAuth.currentUser?.uid!!)
 
             val t = if(time.isNullOrEmpty()) null else "${time[0]}:${time[1]}"
             val date = if(start == null) arrayListOf<String>() else arrayListOf(start, end)
-            val displayName = firebaseRepository.fireAuth.currentUser?.displayName!!
+            val displayName = userInfoRepository.fireAuth.currentUser?.displayName!!
 
             val planData = PlanData(
                 title,
@@ -95,7 +98,7 @@ class AddPlanViewModel @Inject constructor(
             )
 
             viewModelScope.launch {
-                firebaseRepository.setPlan(planData)
+                planRepository.setPlan(planData)
                     .addOnSuccessListener {
                         friendList.value!!.forEach {
                             sendInviteMessage(it)
@@ -113,7 +116,7 @@ class AddPlanViewModel @Inject constructor(
 
 
     private fun sendInviteMessage(uid: String){
-        val friendInfo = firebaseRepository.getUserInfo(uid)
+        val friendInfo = userInfoRepository.getUserInfo(uid)
 
         friendInfo
             .collection("CloudMessaging").document("Token")
@@ -127,7 +130,7 @@ class AddPlanViewModel @Inject constructor(
                                 token,
                                 Fcm.FcmMessage(
                                     "초대장",
-                                    "${firebaseRepository.fireAuth.currentUser?.displayName}님이 모임에 초대하였습니다."
+                                    "${userInfoRepository.fireAuth.currentUser?.displayName}님이 모임에 초대하였습니다."
                                 )
                             ),
                             BuildConfig.FirebaseCloudMessaging

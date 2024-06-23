@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.contact.adapter.add_plan.AddPlanFriendListAdapter
 import com.example.contact.databinding.ActivityAddPlanBinding
-import com.example.contact.util.firebase.FirebaseRepository
+import com.example.contact.util.firebase.UserInfoRepository
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class AddPlan : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlanBinding
     private val viewModel: AddPlanViewModel by viewModels()
-    @Inject lateinit var firebaseRepository: FirebaseRepository
+    @Inject lateinit var userInfoRepository: UserInfoRepository
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class AddPlan : AppCompatActivity() {
             startActivityForResult(intent, 1)
         }
 
-        val friendListAdapter = AddPlanFriendListAdapter(viewModel, firebaseRepository)
+        val friendListAdapter = AddPlanFriendListAdapter(viewModel, userInfoRepository)
         binding.friendRecyclerView.adapter = friendListAdapter
 
         viewModel.friendList.observe(this){

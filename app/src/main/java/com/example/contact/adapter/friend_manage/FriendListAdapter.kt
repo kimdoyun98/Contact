@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.R
 import com.example.contact.data.user.UserInfo
 import com.example.contact.databinding.FriendListBsBinding
 import com.example.contact.databinding.FriendListItemBinding
+import com.example.contact.ui.home.friend.FMViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -21,7 +23,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FriendListAdapter: RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(
+    private val viewModel:FMViewModel,
+    private val lifecycleOwner: LifecycleOwner
+): RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
     private lateinit var binding: FriendListItemBinding
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var context: Context
@@ -33,20 +38,21 @@ class FriendListAdapter: RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View,
+        private val viewModel: FMViewModel,
+        private val lifecycleOwner: LifecycleOwner
+    ): RecyclerView.ViewHolder(view){
         fun bind(position: Int){
-            CoroutineScope(Dispatchers.Main).launch {
-                FirebaseFirestore.getInstance().collection("Users").document(uidList[position])
-                    .asFlow<UserInfo>().collect{
-                        binding.displayName = it?.displayName
-                    }
-            }
+            binding.viewModel = viewModel
+            binding.lifecycleOwner = lifecycleOwner
+
+            binding.currentUid = uidList[position]
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = FriendListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding.root)
+        return ViewHolder(binding.root, viewModel, lifecycleOwner)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -70,20 +76,18 @@ class FriendListAdapter: RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
                             .collection("Friend").document("friend")
 
                         myFriend.get().addOnSuccessListener {
-                                val list = it.data!!["friend"] as ArrayList<String>
-                                val index = list.indexOf(uidList[position])
-                                list.removeAt(index)
+                                val map = it.data!!["friend"] as HashMap<String, String>
+                                map.remove(uidList[position])
 
-                                myFriend.set(hashMapOf("friend" to list))
+                                myFriend.set(hashMapOf("friend" to map))
                             }
 
                         // 친구 DB
                         userFriend.get().addOnSuccessListener {
-                            val list = it.data!!["friend"] as ArrayList<String>
-                            val index = list.indexOf(Firebase.auth.currentUser!!.uid)
-                            list.removeAt(index)
+                            val map = it.data!!["friend"] as HashMap<String, String>
+                            map.remove(Firebase.auth.currentUser!!.uid)
 
-                            myFriend.set(hashMapOf("friend" to list))
+                            myFriend.set(hashMapOf("friend" to map))
                         }
 
                         Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_LONG).show()

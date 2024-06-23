@@ -16,5 +16,5 @@ data class Request(
 )
 
 data class Friend(
-    val friend: ArrayList<String> = arrayListOf()
+    val friend: HashMap<String, String> = hashMapOf()
 )

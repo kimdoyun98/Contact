@@ -3,6 +3,7 @@ package com.example.contact.ui.home.friend
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.contact.adapter.friend_manage.FriendListAdapter
@@ -60,11 +61,11 @@ class FriendManagement : AppCompatActivity() {
          * 친구 목록
          */
 
-        val friendListAdapter = FriendListAdapter()
+        val friendListAdapter = FriendListAdapter(viewModel, this)
         binding.friendRecyclerView.adapter = friendListAdapter
 
         viewModel.friendList.observe(this){
-            friendListAdapter.setUidList(it?.friend, this)
+            friendListAdapter.setUidList(it?.friend!!.keys.toMutableList(), this)
         }
     }
 

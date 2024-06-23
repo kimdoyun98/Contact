@@ -2,7 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="displayName"
+            name="viewModel"
+            type="com.example.contact.ui.home.friend.FMViewModel" />
+
+        <variable
+            name="currentUid"
             type="String" />
     </data>
     <LinearLayout
@@ -19,9 +23,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@{displayName}"
-                android:textSize="20dp"/>
+                android:text="@{viewModel.friendList.friend[currentUid]}"
+                android:textSize="20dp"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <ImageView

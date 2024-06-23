@@ -1,6 +1,7 @@
 package com.example.contact.ui.home.add_plan
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -39,7 +40,7 @@ class AddFriendToPlan : AppCompatActivity() {
                 viewModel.getFriendSearch(query)
 
                 viewModel.searchData.observe(this@AddFriendToPlan){ userInfo ->
-                    val snackbar = Snackbar.make(binding.root, "Test", Snackbar.LENGTH_LONG)
+                    val snackbar = Snackbar.make(binding.root, "${userInfo.displayName}", Snackbar.LENGTH_LONG)
                     snackbar.setAction("추가"){
                         viewModel.setOnClick(userInfo.uid!!)
                     }
@@ -65,11 +66,11 @@ class AddFriendToPlan : AppCompatActivity() {
         /**
          * 친구 목록
          */
-        val friendListToPlanAdapter = FriendListToPlanAdapter(viewModel, this, firebaseRepository)
+        val friendListToPlanAdapter = FriendListToPlanAdapter(viewModel, this)
         binding.friendListRecycler.adapter = friendListToPlanAdapter
 
         viewModel.friendList.observe(this){
-            friendListToPlanAdapter.setUidList(it?.friend)
+            friendListToPlanAdapter.setUidList(it?.friend!!.keys.toMutableList())
         }
 
     }

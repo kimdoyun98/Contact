@@ -1,5 +1,6 @@
 package com.example.contact.ui.home.friend
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.Friend
 import com.example.contact.data.user.Response
 import com.example.contact.util.firebase.FirebaseRepository
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.horaciocome1.fireflow.asFlow
 import kotlinx.coroutines.launch
@@ -48,45 +50,35 @@ class FMViewModel @Inject constructor(
      */
     fun requestButton(uid: String, boolean: Boolean){
         val userFriend = firebaseRepository.getUserFriend(uid)
-
-        myFriend.document("response").get().addOnSuccessListener {
-            val list = it.data!!["response"] as ArrayList<String>
-
-            val index = list.indexOf(uid)
-            list.removeAt(index)
-            myFriend.document("response").set(hashMapOf("response" to list))
-        }
-
-        userFriend.document("request").get().addOnSuccessListener {
-            val list = it.data!!["request"] as ArrayList<String>
-
-            val index = list.indexOf(myUid)
-            list.removeAt(index)
-            userFriend.document("request").set(hashMapOf("request" to list))
-        }
+        Log.e("MyUid", myUid)
+        myFriend.document("response").update("response", FieldValue.arrayRemove(uid))
+        userFriend.document("request").update("request", FieldValue.arrayRemove(myUid))
 
         if(boolean){
             //firend Document에 친구 삽입
-            myFriend.document("friend").get()
-                .addOnSuccessListener { document ->
-                    val list = mutableSetOf<String>()
-                    if(document.data != null){
-                        list.addAll(document.data!!["friend"] as ArrayList<String>)
+            firebaseRepository.getUserInfo(uid).get().addOnSuccessListener {
+                val userDisplayName = it.data!!["displayName"] as String
+                myFriend.document("friend").get().addOnSuccessListener { document ->
+                    var map = HashMap<String, String>()
+                    if(!document.data.isNullOrEmpty()){
+                        Log.e("document.data", document.data.toString())
+                        map = document.data!!["friend"] as HashMap<String, String>
                     }
 
-                    list.add(uid)
-                    myFriend.document("friend").set(hashMapOf("friend" to list.toList()))
+                    map[uid] = userDisplayName
+                    myFriend.document("friend").set(hashMapOf("friend" to map))
                 }
+            }
 
             userFriend.document("friend").get()
                 .addOnSuccessListener { document ->
-                    val list = mutableSetOf<String>()
-                    if(document.data != null){
-                        list.addAll(document.data!!["friend"] as ArrayList<String>)
+                    var map = HashMap<String, String>()
+                    if(!document.data.isNullOrEmpty()){
+                        map = document.data!!["friend"] as HashMap<String, String>
                     }
 
-                    list.add(myUid)
-                    userFriend.document("friend").set(hashMapOf("friend" to list.toList()))
+                    map[myUid] = firebaseRepository.fireAuth.currentUser?.displayName!!
+                    userFriend.document("friend").set(hashMapOf("friend" to map))
                 }
         }
     }

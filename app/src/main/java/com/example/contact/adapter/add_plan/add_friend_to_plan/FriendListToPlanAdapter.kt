@@ -16,8 +16,7 @@ import kotlinx.coroutines.launch
 
 class FriendListToPlanAdapter(
     private val viewModel: AddFriendToPlanViewModel,
-    private val lifecycleOwner: LifecycleOwner,
-    private val firebaseRepository: FirebaseRepository
+    private val lifecycleOwner: LifecycleOwner
 ): RecyclerView.Adapter<FriendListToPlanAdapter.ViewHolder>() {
     private lateinit var binding: AddFriendToPlanItemBinding
     private var uidList = mutableListOf<String>()
@@ -37,13 +36,6 @@ class FriendListToPlanAdapter(
             binding.lifecycleOwner = this@ViewHolder.lifecycleOwner
 
             binding.currentUid = uidList[position]
-
-            CoroutineScope(Dispatchers.Main).launch {
-                firebaseRepository.getUserInfo(uidList[position])
-                    .asFlow<UserInfo>().collect{
-                        binding.displayName = it?.displayName
-                    }
-            }
         }
     }
 

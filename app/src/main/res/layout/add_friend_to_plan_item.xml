@@ -10,10 +10,6 @@
             name="currentUid"
             type="String" />
 
-        <variable
-            name="displayName"
-            type="String" />
-
         <import type="android.view.View"/>
     </data>
 
@@ -28,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{displayName}"
+            android:text="@{viewModel.friendList.friend[currentUid]}"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

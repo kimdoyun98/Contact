@@ -87,6 +87,7 @@ class AddFriendToPlanChatViewModel @Inject constructor(
     private suspend fun handleRegisterChat(): Boolean =
         suspendCoroutine { continuation ->
             val member = HashMap<String, String>()
+            val member2 = arrayListOf(myUid)
             val map = friendList.value?.friend
             val memberDisplayName = arrayListOf(userInfoRepository.fireAuth.currentUser?.displayName!!)
 
@@ -96,6 +97,7 @@ class AddFriendToPlanChatViewModel @Inject constructor(
                 if(map!![it] != null) {
                     memberDisplayName.add(map[it]!!)
                     member[it] = map[it]!!
+                    member2.add(it)
                 }
             }
             val title = memberDisplayName.toString().apply {
@@ -104,7 +106,8 @@ class AddFriendToPlanChatViewModel @Inject constructor(
 
             chatRepository.registerChat(
                 title = title,
-                member = member
+                member = member,
+                member2 = member2
             ).addOnSuccessListener {
                 docId = it.id
                 continuation.resume(true)

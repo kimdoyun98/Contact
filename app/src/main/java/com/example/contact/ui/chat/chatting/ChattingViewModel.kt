@@ -77,12 +77,13 @@ object DataBindingAdapterUtil {
     @JvmStatic
     @BindingAdapter("author_visibility")
     fun visibility(view: TextView, data: ChattingData){
+        val author = data.author.values.toList()[0]
+        view.text = author
         if(data.author.containsKey(myUid)){
             view.visibility = View.INVISIBLE
         }
         else {
             view.visibility = View.VISIBLE
-            view.text = data.author[myUid]
         }
     }
     @JvmStatic
@@ -96,3 +97,18 @@ object DataBindingAdapterUtil {
         }
     }
 }
+
+/**
+ * Error
+ * 데이터 바인딩 오류
+ * java.lang.IllegalStateException: Required DataBindingComponent is null in class MessageItemBindingImpl.
+ * A BindingAdapter in com.example.contact.ui.chat.chatting.ChattingViewModel is not static and requires an object to use, retrieved from the DataBindingComponent.
+ * If you don't use an inflation method taking a DataBindingComponent, use DataBindingUtil.setDefaultComponent or make all BindingAdapter methods static.
+ *
+ *
+ * BindingAdapter가 static이 아니며, object에서 사용해야한다.
+ *
+ * 따라서 object 내에서
+ * @JVMStatic과 같이 써야함
+ *
+ */

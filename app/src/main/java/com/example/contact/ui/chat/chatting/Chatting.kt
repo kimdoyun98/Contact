@@ -60,7 +60,10 @@ class Chatting : AppCompatActivity() {
         viewModel.getChatMessage(docId).observe(this){
             val docList = it?.documents?.sortedBy { doc -> doc.id }
             docList?.let { it1 -> adapter.setDocList(it1) }
+
+            binding.messageRecycler.scrollToPosition(docList!!.size-1)
         }
+
 
 
         binding.register.setOnClickListener {

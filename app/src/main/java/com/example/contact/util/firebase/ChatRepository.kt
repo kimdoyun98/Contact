@@ -29,9 +29,19 @@ class ChatRepository: FirebaseRepository() {
 
     fun getChatList(uid: String) = fireStore.collection("Chat").whereArrayContains("member2", uid).snapshotAsFlow().asLiveData()
 
-    fun getChatInfo(doc: String) = fireStore.collection("Chat").document(doc).asFlow<ChatData>().asLiveData()
+    fun getChatInfo(doc: String) = fireStore.collection("Chat").document(doc).asFlow<ChatData>()
 
     fun getChatMessage(doc: String) =
         fireStore.collection("Chat").document(doc)
             .collection("Message").snapshotAsFlow().asLiveData()
+
+    fun setChatMessage(doc: String, date: String, message: String, author: HashMap<String, String>) =
+        fireStore.collection("Chat").document(doc)
+            .collection("Message").document(date)
+            .set(
+                hashMapOf(
+                    "message" to message,
+                    "author" to author
+                )
+            )
 }

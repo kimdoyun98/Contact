@@ -3,6 +3,8 @@ package com.example.contact.ui.chat.chatting
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.contact.R
@@ -73,6 +75,18 @@ class Chatting : AppCompatActivity() {
                 doc = docId,
                 message = message
             )
+
+            binding.edit.text = null
         }
+
+        binding.edit.setOnKeyListener { v, keyCode, event ->
+            if(keyCode == KeyEvent.KEYCODE_ENTER && binding.edit.text.isNotBlank()) binding.register.performClick()
+            return@setOnKeyListener false
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        finish()
+        return super.onOptionsItemSelected(item)
     }
 }

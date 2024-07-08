@@ -11,10 +11,16 @@ import com.google.firebase.firestore.DocumentSnapshot
 class ChattingAdapter: RecyclerView.Adapter<ChattingAdapter.ViewHolder>() {
     private lateinit var binding: MessageItemBinding
     private var docList = listOf<DocumentSnapshot>()
+    private var startStatus = false
 
     fun setDocList(list: List<DocumentSnapshot>){
+        //TODO 데이터 꼬임 고쳐야 함
         docList = list
-        notifyDataSetChanged()
+        if(!startStatus) {
+            notifyDataSetChanged()
+            startStatus = true
+        }
+        else notifyItemInserted(list.size)
     }
 
     inner class ViewHolder(v: View): RecyclerView.ViewHolder(v){

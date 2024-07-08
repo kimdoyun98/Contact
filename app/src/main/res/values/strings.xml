@@ -13,6 +13,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="chat">채팅</string>
     <string name="chat_add">채팅 추가</string>
+    <string name="recent_search">최근 검색어</string>
+    <string name="chatting_room">채팅방</string>
     <string name="progress_add_friend">요청취소</string>
     <string name="add">추가</string>
     <string name="accept_button_click">수락하셨습니다.</string>

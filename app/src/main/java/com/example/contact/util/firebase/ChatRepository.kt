@@ -1,5 +1,6 @@
 package com.example.contact.util.firebase
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import com.example.contact.data.chat.ChatData
 import io.github.horaciocome1.fireflow.asFlow
@@ -27,7 +28,9 @@ class ChatRepository: FirebaseRepository() {
             )
         )
 
-    fun getChatList(uid: String) = fireStore.collection("Chat").whereArrayContains("member2", uid).snapshotAsFlow().asLiveData()
+    fun getChatList(uid: String) =
+        fireStore.collection("Chat")
+        .whereArrayContains("member2", uid).snapshotAsFlow()
 
     fun getChatInfo(doc: String) = fireStore.collection("Chat").document(doc).asFlow<ChatData>()
 

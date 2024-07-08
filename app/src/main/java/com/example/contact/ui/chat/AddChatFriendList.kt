@@ -47,7 +47,7 @@ class AddChatFriendList : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.home -> finish()
+            android.R.id.home -> finish()
             R.id.menu_check -> viewModel.registerChat()
         }
 

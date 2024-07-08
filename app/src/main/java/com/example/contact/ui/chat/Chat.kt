@@ -2,7 +2,6 @@ package com.example.contact.ui.chat
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import com.example.contact.adapter.chat.ChatAdapter
 import com.example.contact.databinding.FragmentChatBinding
 import com.example.contact.ui.chat.chatting.ChatViewModel
 import com.example.contact.ui.chat.chatting.Chatting
+import com.example.contact.ui.chat.search.SearchChat
 import com.example.contact.ui.plan.PlanClickEvent
 import com.example.contact.util.MyApplication
 import com.google.firebase.firestore.DocumentSnapshot
@@ -64,7 +64,6 @@ class Chat : Fragment() {
                 chatIntent.putExtra("docId", doc.id)
                 startActivity(chatIntent)
             }
-
         })
 
     }

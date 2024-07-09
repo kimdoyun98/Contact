@@ -1,10 +1,12 @@
 package com.example.contact.ui.chat.search
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.contact.data.user.Friend
 import com.example.contact.data.user.UserInfo
+import com.example.contact.util.MyApplication
 import com.example.contact.util.firebase.ChatRepository
 import com.example.contact.util.firebase.UserInfoRepository
 import com.google.firebase.firestore.DocumentSnapshot
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,12 +35,48 @@ class SearchChatViewModel @Inject constructor(
     private var _searchChat = MutableStateFlow<List<DocumentSnapshot>>(listOf())
     val searchChat:StateFlow<List<DocumentSnapshot>> = _searchChat
 
+
     /**
      * 검색 >> 친구 & 채팅창
      */
     fun setSearch(search: String){
         searchUser(search)
         searchChat(search)
+    }
+
+    /**
+     * 최근 검색어
+     */
+    fun saveRecentSearch(query: String){
+        val arrList = getSearchData()
+        arrList.add(0, query)
+        updateRecentSearch(arrList)
+    }
+
+    fun deleteRecentSearch(query: String){
+        val arrList = getSearchData()
+        arrList.remove(query)
+        updateRecentSearch(arrList)
+    }
+
+    private fun getSearchData(): ArrayList<String>{
+        val recent = MyApplication.prefs.getRecentSearch()
+        val arrList = ArrayList<String>()
+
+        repeat(recent.length()){
+            arrList.add(recent.optString(it))
+        }
+        return arrList
+    }
+
+    private fun updateRecentSearch(arrList: ArrayList<String>){
+        val jsonArr = JSONArray()
+        arrList.forEach {
+            jsonArr.put(it)
+        }
+
+        // 저장
+        MyApplication.prefs.setRecentSearch(jsonArr.toString())
     }
 
     /**
